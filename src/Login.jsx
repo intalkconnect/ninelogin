@@ -52,7 +52,6 @@ export default function Login() {
         body: JSON.stringify({ 
           email, 
           password, 
-          csrfToken,
           rememberMe // Envia a preferência para o backend
         })
       });
