@@ -19,7 +19,7 @@ export default function Login() {
 
     const fetchCsrfToken = async () => {
       try {
-        const res = await fetch('http://localhost:4000/api/csrf-token', {
+        const res = await fetch('https://hubserver-wi8m.onrender.com/api/csrf-token', {
           credentials: 'include'
         });
         const data = await res.json();
@@ -42,7 +42,7 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await fetch('http://localhost:4000/api/login', {
+      const res = await fetch('https://hubserver-wi8m.onrender.com/api/login', {
         method: 'POST',
         credentials: 'include',
         headers: {
