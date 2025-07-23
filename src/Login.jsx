@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css';
 
+const BACKEND_URL = import.meta.env.VITE_APP_LOGIN_BACKEND_URL;
+
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -19,7 +21,7 @@ export default function Login() {
 
     const fetchCsrfToken = async () => {
       try {
-        const res = await fetch('https://hubserver-wi8m.onrender.com/api/csrf-token', {
+        const res = await fetch(`${BACKEND_URL}/api/csrf-token`, {
           credentials: 'include'
         });
         const data = await res.json();
@@ -42,7 +44,7 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await fetch('https://hubserver-wi8m.onrender.com/api/login', {
+      const res = await fetch(`${BACKEND_URL}/api/login`, {
         method: 'POST',
         credentials: 'include',
         headers: {
