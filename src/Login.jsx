@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css';
+import logo from './assets/ninechat_logo_icons.png'; // coloque o arquivo PNG na pasta "assets"
 
 const BACKEND_URL = import.meta.env.VITE_APP_LOGIN_BACKEND_URL;
 
@@ -11,7 +12,6 @@ export default function Login() {
   const [csrfToken, setCsrfToken] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
 
-  // Carrega email salvo e busca CSRF Token ao montar o componente
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
     if (savedEmail) {
@@ -51,20 +51,15 @@ export default function Login() {
           'Content-Type': 'application/json',
           'CSRF-Token': csrfToken
         },
-        body: JSON.stringify({ 
-          email, 
-          password, 
-          rememberMe // Envia a preferência para o backend
-        })
+        body: JSON.stringify({ email, password, rememberMe })
       });
 
       const data = await res.json();
-      
+
       if (!res.ok) {
         throw new Error(data.message || 'Falha no login');
       }
 
-      // Salva o email se "Lembrar-me" estiver marcado
       if (rememberMe) {
         localStorage.setItem('rememberedEmail', email);
       } else {
@@ -90,7 +85,9 @@ export default function Login() {
   return (
     <div className="login-container">
       <div className="login-box">
-        <h2>Portal Omnichannel</h2>
+        {/* Substituí o texto pelo logo */}
+        <img src={logo} alt="NineChat" className="login-logo" />
+
         <p>Acesse sua conta corporativa</p>
 
         <input
