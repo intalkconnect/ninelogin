@@ -355,6 +355,52 @@
   outline-offset: 2px;
 }
 
+/* Mensagens */
+.error-message, .success-message {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 12px;
+  border-radius: 10px;
+  margin: 10px 0 16px;
+  font-size: 14px;
+  line-height: 1.35;
+}
+.error-message { background: #ffe7e7; color: #7a0b0b; }
+.success-message { background: #e9f9ef; color: #0b6b3a; }
+.error-icon { flex-shrink: 0; }
+
+/* Textos auxiliares */
+.helper-text {
+  color: #6b7280;
+  font-size: 12px;
+  margin-top: 6px;
+}
+.mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace; }
+
+/* Links do rodapé dos formulários */
+.form-footer-links {
+  margin-top: 12px;
+  text-align: center;
+}
+.auth-link {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 600;
+}
+.auth-link:hover { text-decoration: underline; }
+
+/* Botão carregando já herda sua .login-button */
+.loading-content { display: inline-flex; gap: 8px; align-items: center; }
+.spinner {
+  width: 16px; height: 16px; border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.5);
+  border-top-color: #fff;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   .login-card {
@@ -391,3 +437,4 @@
     filter: none;
   }
 }
+
