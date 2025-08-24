@@ -7,18 +7,31 @@ export default function ForgotPassword(){
   const [sent, setSent] = useState(false);
   const [err, setErr] = useState('');
 
-  async function submit(e){
-    e.preventDefault();
-    setErr('');
-    try{
-      await fetch(`${BACKEND_URL}/api/forgot-password`,{
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ email })
-      });
+async function submit(e){
+  e.preventDefault();
+  setErr('');
+  try{
+    const res = await fetch(`${BACKEND_URL}/api/forgot-password`, {
+      method:'POST',
+      credentials:'include', // ok enviar ou não; com CORS + credenciais funciona
+      headers:{ 'Content-Type':'application/json' },
+      body: JSON.stringify({ email })
+    });
+
+    // Sucesso se for 2xx (inclui 204) — alguns proxies respondem 204
+    if (res.ok) {
       setSent(true);
-    }catch(e){ setErr('Erro ao enviar'); }
+      return;
+    }
+
+    // Tentativa de extrair erro (se houver)
+    const data = await res.json().catch(() => null);
+    throw new Error(data?.message || `Falha (${res.status})`);
+  }catch(e){
+    setErr(e.message || 'Erro ao enviar o link. Tente novamente.');
   }
+}
+
 
   return (
     <div style={{maxWidth:520,margin:'40px auto',fontFamily:'system-ui'}}>
