@@ -1,9 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css';
-import logo from './assets/ninechat_logo_icons.png'; // coloque o arquivo PNG na pasta "assets"
+import logo from './assets/ninechat_logo_icons.png';
 import { useNavigate } from 'react-router-dom';
 
-const BACKEND_URL = import.meta.env.VITE_APP_LOGIN_BACKEND_URL;
+/** ==== BASE DO BACKEND ====
+ * Usa VITE_APP_LOGIN_BACKEND_URL do .env
+ * Aceita valores com ou sem "https://"
+ * Gera URL absoluta SEM barra final
+ */
+const RAW_BACKEND = (import.meta.env.VITE_APP_LOGIN_BACKEND_URL || '').trim();
+const API_BASE = (RAW_BACKEND.startsWith('http') ? RAW_BACKEND : `https://${RAW_BACKEND}`)
+  .replace(/\/+$/, '');
+
+function apiUrl(path = '') {
+  const p = String(path).replace(/^\/+/, '');
+  return `${API_BASE}/${p}`;
+}
+
+/** helper para parse seguro da resposta */
+async function parseResponse(res) {
+  const ct = (res.headers.get('content-type') || '').toLowerCase();
+  if (ct.includes('application/json')) return res.json();
+  const text = await res.text();
+  try { return JSON.parse(text); } catch { return { _raw: text }; }
+}
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -22,20 +42,19 @@ export default function Login() {
       setRememberMe(true);
     }
 
-    const fetchCsrfToken = async () => {
+    (async () => {
       try {
-        const res = await fetch(`${BACKEND_URL}/api/csrf-token`, {
-          credentials: 'include'
+        const res = await fetch(apiUrl('/api/csrf-token'), {
+          credentials: 'include',
         });
-        const data = await res.json();
+        const data = await parseResponse(res);
+        if (!res.ok || !data?.token) throw new Error('CSRF inválido');
         setCsrfToken(data.token);
       } catch (err) {
         console.error('CSRF Error:', err);
         setError('Falha na configuração de segurança');
       }
-    };
-
-    fetchCsrfToken();
+    })();
   }, []);
 
   const handleLogin = async () => {
@@ -48,35 +67,35 @@ export default function Login() {
     setError('');
 
     try {
-      const res = await fetch(`${BACKEND_URL}/api/login`, {
+      const res = await fetch(apiUrl('/api/login'), {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          'CSRF-Token': csrfToken
+          'CSRF-Token': csrfToken || '',
         },
-        body: JSON.stringify({ email, password, rememberMe })
+        body: JSON.stringify({ email, password, rememberMe }),
       });
 
-      const data = await res.json();
+      const data = await parseResponse(res);
 
       if (!res.ok) {
-        throw new Error(data.message || 'Falha no login');
+        const msg =
+          (data && (data.message || data.error)) ||
+          (typeof data?._raw === 'string' ? data._raw : 'Falha no login');
+        throw new Error(msg);
       }
 
-      if (rememberMe) {
-        localStorage.setItem('rememberedEmail', email);
-      } else {
-        localStorage.removeItem('rememberedEmail');
-      }
+      if (rememberMe) localStorage.setItem('rememberedEmail', email);
+      else localStorage.removeItem('rememberedEmail');
 
-      if (data.redirectUrl) {
+      if (data?.redirectUrl) {
         window.location.href = data.redirectUrl;
       } else {
         setError('URL de redirecionamento não recebida');
       }
     } catch (err) {
-      setError(err.message || 'Erro ao fazer login');
+      setError(err?.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }
@@ -88,21 +107,18 @@ export default function Login() {
 
   return (
     <div className="login-container">
-      {/* Background Pattern */}
       <div className="bg-pattern-1"></div>
       <div className="bg-pattern-2"></div>
 
-      {/* Login Card */}
       <div className="login-card">
         <img src={logo} alt="NineChat" className="login-logo" />
-        
+
         <div className="login-header">
           <h2 className="login-title">Bem-vindo de volta</h2>
           <p className="login-subtitle">Acesse sua conta corporativa</p>
         </div>
 
         <div className="login-form">
-          {/* Email Input */}
           <div className="input-group">
             <label htmlFor="email" className="input-label">Email corporativo</label>
             <div className="input-wrapper">
@@ -124,13 +140,12 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Password Input */}
           <div className="input-group">
             <label htmlFor="password" className="input-label">Senha</label>
             <div className="input-wrapper">
               <input
                 id="password"
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -157,7 +172,6 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Remember Me & Forgot Password */}
           <div className="remember-row">
             <div className="remember-me">
               <input
@@ -170,17 +184,16 @@ export default function Login() {
               />
               <label htmlFor="rememberMe" className="checkbox-label">Lembrar-me</label>
             </div>
-    <button
-      type="button"
-      className="forgot-password"
-      onClick={() => navigate('/auth/forgot-password')}
-    >
-      Esqueceu a senha?
-    </button>
-
+            <button
+              type="button"
+              className="forgot-password"
+              onClick={() => navigate('/auth/forgot-password')}
+              disabled={loading}
+            >
+              Esqueceu a senha?
+            </button>
           </div>
 
-          {/* Error Message */}
           {error && (
             <div className="error-message">
               <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" className="error-icon">
@@ -190,7 +203,6 @@ export default function Login() {
             </div>
           )}
 
-          {/* Login Button */}
           <button
             onClick={handleLogin}
             disabled={loading}
@@ -207,7 +219,6 @@ export default function Login() {
           </button>
         </div>
 
-        {/* Footer */}
         <div className="login-footer">
           <p className="footer-text">Protegido por criptografia de ponta a ponta</p>
           <div className="security-indicator">
@@ -219,5 +230,3 @@ export default function Login() {
     </div>
   );
 }
-
-
