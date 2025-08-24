@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../Login.css';
-import logo from './assets/ninechat_logo_icons.png';
+import logo from '../assets/ninechat_logo_icons.png';
 import { Link } from 'react-router-dom';
 
 // ==== BASE DO BACKEND (mesma lógica do Login.jsx) ====
