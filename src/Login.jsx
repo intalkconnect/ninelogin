@@ -168,9 +168,14 @@ export default function Login() {
               />
               <label htmlFor="rememberMe" className="checkbox-label">Lembrar-me</label>
             </div>
-            <button type="button" className="forgot-password">
-              Esqueceu a senha?
-            </button>
+<button
+  type="button"
+  className="forgot-password"
+  onClick={() => window.location.href = '/auth/forgot-password'}
+>
+  Esqueceu a senha?
+</button>
+
           </div>
 
           {/* Error Message */}
@@ -212,3 +217,4 @@ export default function Login() {
     </div>
   );
 }
+
