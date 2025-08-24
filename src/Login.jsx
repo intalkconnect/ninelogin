@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css';
 import logo from './assets/ninechat_logo_icons.png'; // coloque o arquivo PNG na pasta "assets"
+import { useNavigate } from 'react-router-dom';
 
 const BACKEND_URL = import.meta.env.VITE_APP_LOGIN_BACKEND_URL;
 
@@ -12,6 +13,7 @@ export default function Login() {
   const [csrfToken, setCsrfToken] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
@@ -168,13 +170,13 @@ export default function Login() {
               />
               <label htmlFor="rememberMe" className="checkbox-label">Lembrar-me</label>
             </div>
-<button
-  type="button"
-  className="forgot-password"
-  onClick={() => window.location.href = '/auth/forgot-password'}
->
-  Esqueceu a senha?
-</button>
+    <button
+      type="button"
+      className="forgot-password"
+      onClick={() => navigate('/auth/forgot-password')}
+    >
+      Esqueceu a senha?
+    </button>
 
           </div>
 
@@ -217,4 +219,5 @@ export default function Login() {
     </div>
   );
 }
+
 
