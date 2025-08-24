@@ -114,13 +114,13 @@ export default function Login() {
         <img src={logo} alt="NineChat" className="login-logo" />
 
         <div className="login-header">
-          <h2 className="login-title">Bem-vindo de volta</h2>
-          <p className="login-subtitle">Acesse sua conta corporativa</p>
+          <h2 className="login-title">Bem-vindo(a) ao NineChat</h2>
+          <p className="login-subtitle">Acesse sua conta</p>
         </div>
 
         <div className="login-form">
           <div className="input-group">
-            <label htmlFor="email" className="input-label">Email corporativo</label>
+            <label htmlFor="email" className="input-label">Email</label>
             <div className="input-wrapper">
               <input
                 id="email"
@@ -230,3 +230,4 @@ export default function Login() {
     </div>
   );
 }
+
