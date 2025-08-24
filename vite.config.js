@@ -1,15 +1,20 @@
+// vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
+// permitir subdomínios .dkdevs.com.br no dev/preview
+const allowed = ['.dkdevs.com.br']
+
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: true,            // escutar em 0.0.0.0 no Docker
+    allowedHosts: allowed, // libera acesso por domínio
+  },
   preview: {
-    host: '0.0.0.0',
-    port: 3300,
-    allowedHosts: [
-      'portal.dkdevs.com.br',   // libera esse domínio
-      'srv-auth.dkdevs.com.br'  // adicione outros se precisar
-    ]
-  }
+    host: true,
+    port: 3300,            // bate com o compose
+    strictPort: true,
+    allowedHosts: allowed,
+  },
 })
