@@ -3,7 +3,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // permitir subdomínios .dkdevs.com.br no dev/preview
-const allowed = ['.dkdevs.com.br']
+const allowed = ['.dkdevs.com.br', '.ninechat.com.br']
 
 export default defineConfig({
   plugins: [react()],
