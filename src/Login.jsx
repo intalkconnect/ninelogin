@@ -75,6 +75,7 @@ export default function Login() {
           'CSRF-Token': csrfToken || '',
         },
         body: JSON.stringify({ email, password, rememberMe }),
+        credentials: 'include'
       });
 
       const data = await parseResponse(res);
@@ -230,4 +231,5 @@ export default function Login() {
     </div>
   );
 }
+
 
