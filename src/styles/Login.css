@@ -9,13 +9,22 @@
   --danger: #ef4444;
 }
 
+/* ===== Reset para ocupar a viewport e sumir com a barra ===== */
+html, body, #root { height: 100%; }
+body { margin: 0; }
 * { box-sizing: border-box; }
 
+/* Container principal usa 100dvh para considerar barras do mobile */
 .lp-shell{
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   background: var(--bg);
   color: var(--text);
+}
+
+/* Em desktop, evita scroll acidental de 1px */
+@media (min-width: 1024px){
+  html, body { overflow: hidden; }
 }
 
 /* ===== Left brand ===== */
@@ -63,25 +72,57 @@
   text-transform: uppercase; letter-spacing: .08em; opacity: .9;
 }
 
-/* grid com 9 motivos */
-.lp-why9{
-  list-style:none; margin: 0; padding: 0;
-  display: grid; gap: 12px; grid-template-columns: 1fr;
+/* ===== Nuvem de palavras com 9 motivos ===== */
+.lp-cloud{
+  list-style: none;
+  margin: 4px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 10px 14px;
+  align-items: center;
 }
-@media (min-width: 640px){ .lp-why9{ grid-template-columns: repeat(2, minmax(0,1fr)); } }
-@media (min-width: 1024px){ .lp-why9{ grid-template-columns: repeat(3, minmax(0,1fr)); } }
-
-.lp-why9 li{
-  display:flex; align-items:center; gap:10px; color:#cbd5e1; font-size: 14px; line-height: 1.35;
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-  border: 1px solid rgba(148,163,184,0.18);
-  border-radius: 10px; padding: 10px 12px; backdrop-filter: blur(6px);
+.lp-cloud li{
+  --s: 1;        /* multiplicador de tamanho */
+  --rot: 0deg;   /* rotação leve */
+  --alpha: .92;  /* opacidade do texto */
+  grid-column: span 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: calc(14px * var(--s));
+  color: rgba(226,232,240,var(--alpha));
+  letter-spacing: .2px;
+  text-shadow: 0 6px 18px rgba(2,6,23,.35);
+  transform: rotate(var(--rot));
+  white-space: nowrap;
 }
+/* Variações para parecer "nuvem" */
+.lp-cloud li:nth-child(1){ --s:1.25; grid-column: span 6; --rot:-1.2deg; }
+.lp-cloud li:nth-child(2){ --s:1.10; grid-column: span 6; --rot: 1deg; }
+.lp-cloud li:nth-child(3){ --s:1.20; grid-column: span 7; --rot:-.6deg; }
+.lp-cloud li:nth-child(4){ --s:1.00; grid-column: span 5; --rot: .4deg; }
+.lp-cloud li:nth-child(5){ --s:1.15; grid-column: span 6; --rot:-.8deg; }
+.lp-cloud li:nth-child(6){ --s:0.95; grid-column: span 5; --rot: .6deg; }
+.lp-cloud li:nth-child(7){ --s:1.10; grid-column: span 6; --rot:-.4deg; }
+.lp-cloud li:nth-child(8){ --s:1.00; grid-column: span 5; --rot: .2deg; }
+.lp-cloud li:nth-child(9){ --s:1.30; grid-column: span 7; --rot:-1deg; }
 
-/* marcador */
-.lp-dot{
-  width:8px; height:8px; border-radius:50%; background:#3b82f6; display:inline-block;
+/* Pontinho azul */
+.lp-cloud .lp-dot{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #3b82f6; display: inline-block;
   box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+}
+
+/* Responsivo da nuvem */
+@media (max-width: 1280px){
+  .lp-cloud { grid-template-columns: repeat(10, 1fr); }
+}
+@media (max-width: 1024px){
+  .lp-cloud { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .lp-cloud li{ --rot: 0deg; }
 }
 
 /* ===== Right/form side ===== */
