@@ -69,7 +69,6 @@ export default function Login() {
     try {
       const res = await fetch(apiUrl('/api/login'), {
         method: 'POST',
-        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
           'CSRF-Token': csrfToken || '',
@@ -231,5 +230,6 @@ export default function Login() {
     </div>
   );
 }
+
 
 
