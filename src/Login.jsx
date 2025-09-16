@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import { TagCloud } from 'react-tagcloud';
-import './style/Login.css';
+import './styles/Login.css';
 
 /* =========== BASE DO BACKEND =========== */
 const RAW_BACKEND = (import.meta.env.VITE_APP_LOGIN_BACKEND_URL || '').trim();
@@ -262,3 +262,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
