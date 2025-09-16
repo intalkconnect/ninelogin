@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Eye, EyeOff, Mail, Building2, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import './LoginPage.css';
+import './Login.css';
 import logo from './assets/ninechat_logo_icons.png';
 
 /** ==== BASE DO BACKEND ====
@@ -242,3 +242,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
