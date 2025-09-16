@@ -9,23 +9,18 @@
   --danger: #ef4444;
 }
 
-/* ===== Reset para ocupar a viewport e sumir com a barra ===== */
+/* ===== ocupar viewport, remover scroll fantasma ===== */
 html, body, #root { height: 100%; }
 body { margin: 0; }
 * { box-sizing: border-box; }
 
-/* Container principal usa 100dvh para considerar barras do mobile */
 .lp-shell{
-  min-height: 100dvh;
+  min-height: 100dvh;               /* cobre viewport inclusive no mobile */
   display: flex;
   background: var(--bg);
   color: var(--text);
 }
-
-/* Em desktop, evita scroll acidental de 1px */
-@media (min-width: 1024px){
-  html, body { overflow: hidden; }
-}
+@media (min-width: 1024px){ html, body { overflow: hidden; } }
 
 /* ===== Left brand ===== */
 .lp-brand{
@@ -51,88 +46,99 @@ body { margin: 0; }
   padding: 0 64px; color: #e5e7eb;
 }
 
-/* ===== HERO (logo + título) ===== */
-.lp-hero{
-  display:flex; flex-direction:column; align-items:flex-start; gap:12px; margin-bottom: 18px;
-}
-.lp-hero-logo{
-  width: 180px; height: auto;
-  filter: drop-shadow(0 12px 30px rgba(0,0,0,.25));
-}
-.lp-hero-title{
-  font-size: 38px; font-weight: 300; letter-spacing: .2px; margin: 0; color: #e5e7eb;
-}
-.lp-hero-sub{
-  font-size: 18px; color: #cbd5e1; margin: 0;
-}
+.lp-hero{ display:flex; flex-direction:column; align-items:flex-start; gap:12px; margin-bottom: 18px; }
+.lp-hero-logo{ width: 180px; height: auto; filter: drop-shadow(0 12px 30px rgba(0,0,0,.25)); }
+.lp-hero-title{ font-size: 38px; font-weight: 300; letter-spacing: .2px; margin: 0; color: #e5e7eb; }
+.lp-hero-sub{ font-size: 18px; color: #cbd5e1; margin: 0; }
 
-/* título do bloco dos 9 motivos */
 .lp-why-title{
-  margin: 24px 0 10px; color: #e2e8f0; font-weight: 600; font-size: 14px;
-  text-transform: uppercase; letter-spacing: .08em; opacity: .9;
+  margin: 24px 0 8px;
+  color: #e2e8f0;
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  opacity: .9;
 }
 
-/* ===== Nuvem de palavras com 9 motivos ===== */
+/* ========= NUVEM DE PALAVRAS =========
+   - Posição absoluta de cada termo
+   - Tamanhos/rotações/leve "flutuação"
+   - Fallback para grid abaixo de 1200px
+*/
 .lp-cloud{
-  list-style: none;
-  margin: 4px 0 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 10px 14px;
-  align-items: center;
+  position: relative;
+  height: 260px;         /* área da nuvem */
+  margin-top: 4px;
+  user-select: none;
 }
 .lp-cloud li{
-  --s: 1;        /* multiplicador de tamanho */
-  --rot: 0deg;   /* rotação leve */
-  --alpha: .92;  /* opacidade do texto */
-  grid-column: span 5;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  font-size: calc(14px * var(--s));
-  color: rgba(226,232,240,var(--alpha));
+  position: absolute;
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+  border: 1px solid rgba(148,163,184,.16);
+  box-shadow:
+    0 4px 16px rgba(2,6,23,.25),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  color: rgba(226,232,240,.96);
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
   letter-spacing: .2px;
   text-shadow: 0 6px 18px rgba(2,6,23,.35);
-  transform: rotate(var(--rot));
-  white-space: nowrap;
-}
-/* Variações para parecer "nuvem" */
-.lp-cloud li:nth-child(1){ --s:1.25; grid-column: span 6; --rot:-1.2deg; }
-.lp-cloud li:nth-child(2){ --s:1.10; grid-column: span 6; --rot: 1deg; }
-.lp-cloud li:nth-child(3){ --s:1.20; grid-column: span 7; --rot:-.6deg; }
-.lp-cloud li:nth-child(4){ --s:1.00; grid-column: span 5; --rot: .4deg; }
-.lp-cloud li:nth-child(5){ --s:1.15; grid-column: span 6; --rot:-.8deg; }
-.lp-cloud li:nth-child(6){ --s:0.95; grid-column: span 5; --rot: .6deg; }
-.lp-cloud li:nth-child(7){ --s:1.10; grid-column: span 6; --rot:-.4deg; }
-.lp-cloud li:nth-child(8){ --s:1.00; grid-column: span 5; --rot: .2deg; }
-.lp-cloud li:nth-child(9){ --s:1.30; grid-column: span 7; --rot:-1deg; }
-
-/* Pontinho azul */
-.lp-cloud .lp-dot{
-  width: 6px; height: 6px; border-radius: 50%;
-  background: #3b82f6; display: inline-block;
-  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+  transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(var(--s, 1));
+  animation: cloud-bob var(--dur, 7s) ease-in-out var(--delay, 0s) infinite alternate;
 }
 
-/* Responsivo da nuvem */
-@media (max-width: 1280px){
-  .lp-cloud { grid-template-columns: repeat(10, 1fr); }
+/* posições/tamanhos (ajustadas para não sobrepor) */
+.lp-cloud li:nth-child(1){ --s:1.55; --rot:-2deg;  --dur:7s;  --delay:0s;  left:18%; top:14%; }
+.lp-cloud li:nth-child(2){ --s:1.20; --rot: 1deg;  --dur:6.5s; --delay:.2s; left:52%; top:18%; }
+.lp-cloud li:nth-child(3){ --s:1.10; --rot:-1deg;  --dur:7.5s; --delay:.5s; left:82%; top:28%; }
+.lp-cloud li:nth-child(4){ --s:1.25; --rot:.6deg;  --dur:6.8s; --delay:.1s; left:28%; top:48%; }
+.lp-cloud li:nth-child(5){ --s:1.45; --rot:-.8deg; --dur:7.2s; --delay:.3s; left:56%; top:44%; }
+.lp-cloud li:nth-child(6){ --s:1.05; --rot:.4deg;  --dur:6.2s; --delay:.6s; left:82%; top:56%; }
+.lp-cloud li:nth-child(7){ --s:1.15; --rot:-.4deg; --dur:6.9s; --delay:.4s; left:22%; top:70%; }
+.lp-cloud li:nth-child(8){ --s:1.10; --rot:.2deg;  --dur:7.1s; --delay:.7s; left:50%; top:72%; }
+.lp-cloud li:nth-child(9){ --s:1.35; --rot:-1deg;  --dur:7.6s; --delay:.25s; left:76%; top:76%; }
+
+/* animação "flutuar" */
+@keyframes cloud-bob{
+  0%   { transform: translate(-50%, calc(-50% - 4px)) rotate(var(--rot,0)) scale(var(--s,1)); }
+  100% { transform: translate(-50%, calc(-50% + 6px)) rotate(var(--rot,0)) scale(var(--s,1)); }
 }
-@media (max-width: 1024px){
-  .lp-cloud { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  .lp-cloud li{ --rot: 0deg; }
+
+/* hover sutil */
+.lp-cloud li:hover{
+  filter: brightness(1.08);
+  box-shadow:
+    0 8px 28px rgba(2,6,23,.35),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+
+/* Fallback responsivo: vira grid limpo em telas menores */
+@media (max-width: 1200px){
+  .lp-cloud{
+    position: static;
+    height: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 14px;
+  }
+  .lp-cloud li{
+    position: relative;
+    transform: none;
+    animation: none;
+    left: auto; top: auto;
+  }
 }
 
 /* ===== Right/form side ===== */
-.lp-form-side{
-  flex: 1; display:flex; align-items:center; justify-content:center; padding: 24px 24px;
-}
+.lp-form-side{ flex: 1; display:flex; align-items:center; justify-content:center; padding: 24px 24px; }
 @media (min-width:1024px){ .lp-form-side{ padding: 24px 48px; } }
 
 .lp-form-wrap{ width:100%; max-width: 560px; }
-
 .lp-form-head{ text-align:center; margin-bottom: 28px; }
 .lp-form-head h2{ font-size: 28px; margin: 8px 0 6px; }
 .lp-form-head p{ color: var(--muted); margin: 0; }
@@ -159,25 +165,13 @@ body { margin: 0; }
   font-size:14px; color:#0f172a; outline:none;
   transition: border-color .15s ease, box-shadow .15s ease;
 }
-.lp-input-wrap input:focus{
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(37,99,235,.15);
-}
-.lp-input-wrap.has-error input{
-  border-color: #fca5a5;
-  box-shadow: 0 0 0 3px rgba(239,68,68,.12);
-}
+.lp-input-wrap input:focus{ border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,.15); }
+.lp-input-wrap.has-error input{ border-color: #fca5a5; box-shadow: 0 0 0 3px rgba(239,68,68,.12); }
 
-.lp-input-icon{
-  position:absolute; right:10px; top:0; bottom:0; display:flex; align-items:center; color:#94a3b8;
-}
+.lp-input-icon{ position:absolute; right:10px; top:0; bottom:0; display:flex; align-items:center; color:#94a3b8; }
 .lp-input-icon svg{ width:20px; height:20px; }
 
-.lp-eye{
-  position:absolute; right:4px; top:0; bottom:0;
-  display:flex; align-items:center; padding:0 8px;
-  color:#94a3b8; background:transparent; border:0; cursor:pointer;
-}
+.lp-eye{ position:absolute; right:4px; top:0; bottom:0; display:flex; align-items:center; padding:0 8px; color:#94a3b8; background:transparent; border:0; cursor:pointer; }
 .lp-eye:hover{ color: #475569; }
 .lp-eye svg{ width:20px; height:20px; }
 
@@ -186,9 +180,7 @@ body { margin: 0; }
 .lp-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin: 8px 0 14px; }
 .lp-check{ display:flex; align-items:center; gap:8px; color:#475569; font-size:14px; }
 
-.lp-link{
-  background:none; border:0; color: var(--blue); font-weight:600; cursor:pointer;
-}
+.lp-link{ background:none; border:0; color: var(--blue); font-weight:600; cursor:pointer; }
 .lp-link:hover{ color: var(--blue-700); }
 
 .lp-alert{
@@ -212,10 +204,7 @@ body { margin: 0; }
 }
 @keyframes lp-spin{ to{ transform: rotate(360deg); } }
 
-.lp-sec{
-  margin-top: 16px; padding-top: 16px; border-top:1px solid var(--border);
-  display:flex; align-items:center; gap:8px; color:#64748b; font-size:12px;
-}
+.lp-sec{ margin-top: 16px; padding-top: 16px; border-top:1px solid var(--border); display:flex; align-items:center; gap:8px; color:#64748b; font-size:12px; }
 .lp-sec svg{ width:16px; height:16px; }
 
 .lp-footlinks{ margin-top: 18px; text-align:center; }
