@@ -20,38 +20,72 @@ body { margin: 0; }
 @media (min-width: 1024px){ html, body { overflow: hidden; } }
 
 /* LEFT (agora fundo #003e6a e sem nuvem) */
+/* LEFT (fundo #003e6a com leve gradiente) */
 .lp-brand{
   display:none;
   width:50%;
   position:relative;
   overflow:hidden;
-  background:#003e6a;               /* solicitado */
+  background:
+    radial-gradient(1200px 800px at 50% 0%, rgba(255,255,255,.06), transparent 60%),
+    linear-gradient(180deg, #003e6a 0%, #00365d 100%);
 }
 @media (min-width:1024px){ .lp-brand{ display:block; } }
+
+/* overlay sutil para dar profundidade e ajudar a “fundir” */
+.lp-brand::after{
+  content:'';
+  position:absolute; inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(60% 40% at 50% 40%, rgba(255,255,255,.05), transparent 70%),
+    radial-gradient(65% 50% at 50% 70%, rgba(0,0,0,.25), transparent 75%);
+}
 
 .lp-brand-inner{
   position:relative; z-index:1;
   min-height:100%;
   padding: 40px 64px;
   color: #e5e7eb;
-  display:flex;
-  flex-direction:column;
+  display:flex; flex-direction:column;
 }
+
 .lp-center{ align-items:center; justify-content:center; text-align:center; gap: 24px; }
 
-/* logo centralizada acima */
+/* Logo centralizada acima */
 .lp-brand-logo{
   width: 200px; height:auto;
-  filter: drop-shadow(0 12px 30px rgba(0,0,0,.25));
+  filter: drop-shadow(0 10px 24px rgba(0,0,0,.25));
 }
 
-/* figura centralizada usando a imagem do public/bkg-portal.png */
+/* ====== FIGURA CENTRAL “FUNDIDA” ======
+   usa a imagem do public/bkg-portal.png
+   e aplica máscara radial para sumir bordas */
 .lp-brand-figure{
-  width: min(680px, 90%);
+  position: relative;
+  width: min(820px, 90%);
   aspect-ratio: 16 / 9;
-  background: url('/bkg-portal.png') center / contain no-repeat;
-  filter: drop-shadow(0 18px 40px rgba(0,0,0,.35));
+  /* sem sombras/caixas para não parecer card */
+  box-shadow: none;
+  filter: saturate(1.04) brightness(1.02);
 }
+
+/* a imagem vai no ::before para aplicar mask com mais controle */
+.lp-brand-figure::before{
+  content:'';
+  position:absolute; inset:0;
+  background: url('/bkg-portal.png') center / contain no-repeat;
+  /* bordas suavizadas que “somem” no fundo */
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 68%, rgba(0,0,0,0) 95%);
+          mask-image: radial-gradient(ellipse at 50% 50%, #000 68%, rgba(0,0,0,0) 95%);
+  /* ajuste fino de opacidade/blend para mesclar */
+  opacity: .98;
+  mix-blend-mode: screen; /* funciona muito bem com fundo escuro */
+}
+
+/* (opcional) em navegadores que não suportam mix-blend-mode, ainda fica bom
+   graças à máscara; se quiser, remova a linha acima sem prejuízo */
+
 
 /* RIGHT */
 .lp-form-side{ flex:1; display:flex; align-items:center; justify-content:center; padding:24px; }
@@ -132,3 +166,4 @@ body { margin: 0; }
 .lp-footrow{ display:flex; justify-content:center; gap:18px; color:#64748b; font-size:12px; }
 .lp-link-plain{ color:#64748b; text-decoration:none; }
 .lp-link-plain:hover{ color:#334155; }
+
