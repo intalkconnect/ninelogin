@@ -143,7 +143,7 @@ export default function LoginPage() {
               {logo ? <img src={logo} alt="NineChat" /> : <Building2 />}
             </div>
             <h2>Acesse sua conta</h2>
-            <p>Entre com suas credenciais corporativas</p>
+            <p>Faça login em sua conta</p>
           </div>
 
           <form className="lp-card" onSubmit={handleSubmit} noValidate>
@@ -226,20 +226,10 @@ export default function LoginPage() {
             </div>
           </form>
 
-          <div className="lp-footlinks">
-            <p>
-              Não possui acesso?{' '}
-              <a href="#" className="lp-link-plain">Solicitar credenciais</a>
-            </p>
-            <div className="lp-footrow">
-              <a href="#" className="lp-link-plain">Política de Privacidade</a>
-              <a href="#" className="lp-link-plain">Termos de Uso</a>
-              <a href="#" className="lp-link-plain">Suporte</a>
-            </div>
-          </div>
         </div>
       </div>
     </div>
   );
 }
+
 
