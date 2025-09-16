@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
+import { TagCloud } from 'react-tagcloud';
 import './styles/Login.css';
 
 /** ==== BASE DO BACKEND ==== */
@@ -17,9 +18,12 @@ async function parseResponse(res) {
   try { return JSON.parse(text); } catch { return { _raw: text }; }
 }
 
+/** util p/ rotação estável por tag */
+const hash = (s) => [...String(s)].reduce((a, c) => a + c.charCodeAt(0), 0);
+
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -92,6 +96,41 @@ export default function LoginPage() {
     }
   };
 
+  /* ====== TAG CLOUD ====== */
+  const tags = useMemo(() => ([
+    { value: 'Segurança de ponta a ponta',       count: 48 },
+    { value: 'SSO e MFA para acesso seguro',     count: 40 },
+    { value: 'Performance em tempo real',        count: 36 },
+    { value: 'Atendimentos omnichannel',         count: 32 },
+    { value: 'Painéis e métricas acionáveis',    count: 30 },
+    { value: 'Integrações corporativas',         count: 28 },
+    { value: 'Permissões e auditoria',           count: 26 },
+    { value: 'Escalabilidade e resiliência',     count: 38 },
+    { value: 'Suporte humano quando precisar',   count: 29 },
+  ]), []);
+
+  const renderer = (tag, size) => {
+    const h = 210 + (hash(tag.value) % 25);           // variação no tom de azul
+    const rot = (hash(tag.value) % 11) - 5;           // -5..+5 deg
+    return (
+      <span
+        key={tag.value}
+        className="lp-tag"
+        style={{
+          fontSize: size,
+          transform: `rotate(${rot}deg)`,
+          background: `linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03))`,
+          borderColor: `hsl(${h} 50% 65% / .35)`,
+          boxShadow: `0 8px 24px hsl(${h} 70% 40% / .18), inset 0 1px 0 rgba(255,255,255,.06)`,
+        }}
+        title={tag.value}
+      >
+        <i className="lp-dot" />
+        {tag.value}
+      </span>
+    );
+  };
+
   return (
     <div className="lp-shell">
       {/* Lado esquerdo - branding */}
@@ -106,18 +145,17 @@ export default function LoginPage() {
 
           <h3 className="lp-why-title">9 motivos para escolher o NineChat</h3>
 
-          {/* NU V E M  */}
-          <ul className="lp-cloud">
-            <li>Segurança de ponta a ponta</li>
-            <li>SSO e MFA para acesso seguro</li>
-            <li>Performance em tempo real</li>
-            <li>Atendimentos omnichannel</li>
-            <li>Painéis e métricas acionáveis</li>
-            <li>Integrações corporativas</li>
-            <li>Permissões e auditoria</li>
-            <li>Escalabilidade e resiliência</li>
-            <li>Suporte humano quando precisar</li>
-          </ul>
+          {/* NUVEM com react-tagcloud */}
+          <div className="lp-cloud-box" aria-hidden="true">
+            <TagCloud
+              tags={tags}
+              minSize={16}
+              maxSize={34}
+              shuffle={false}       /* ordem estável */
+              renderer={renderer}
+              className="lp-cloud"
+            />
+          </div>
         </div>
       </div>
 
