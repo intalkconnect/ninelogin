@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
-import '/styles/Login.css';
+import './styles/Login.css';
 
 /** ==== BASE DO BACKEND ====
  * Usa VITE_APP_LOGIN_BACKEND_URL do .env
@@ -245,4 +245,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
