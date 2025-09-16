@@ -9,13 +9,13 @@
   --danger: #ef4444;
 }
 
-/* ===== ocupar viewport, remover scroll fantasma ===== */
+/* ocupar viewport e remover scroll fantasma */
 html, body, #root { height: 100%; }
 body { margin: 0; }
 * { box-sizing: border-box; }
 
 .lp-shell{
-  min-height: 100dvh;               /* cobre viewport inclusive no mobile */
+  min-height: 100dvh;
   display: flex;
   background: var(--bg);
   color: var(--text);
@@ -52,86 +52,48 @@ body { margin: 0; }
 .lp-hero-sub{ font-size: 18px; color: #cbd5e1; margin: 0; }
 
 .lp-why-title{
-  margin: 24px 0 8px;
-  color: #e2e8f0;
-  font-weight: 600;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  opacity: .9;
+  margin: 24px 0 10px; color: #e2e8f0; font-weight: 600; font-size: 14px;
+  text-transform: uppercase; letter-spacing: .08em; opacity: .9;
 }
 
-/* ========= NUVEM DE PALAVRAS =========
-   - Posição absoluta de cada termo
-   - Tamanhos/rotações/leve "flutuação"
-   - Fallback para grid abaixo de 1200px
-*/
-.lp-cloud{
-  position: relative;
-  height: 260px;         /* área da nuvem */
-  margin-top: 4px;
+/* ===== TagCloud ===== */
+.lp-cloud-box{
+  margin-top: 6px;
+  padding: 8px 2px 2px;
+  border-radius: 12px;
+}
+
+.lp-cloud{                   /* classe aplicada pelo componente */
+  line-height: 1.15;
   user-select: none;
 }
-.lp-cloud li{
-  position: absolute;
-  margin: 0;
-  padding: 6px 10px;
+
+/* Cada tag (custom renderer) */
+.lp-tag{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin: 8px 10px;
   border-radius: 10px;
-  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
-  border: 1px solid rgba(148,163,184,.16);
-  box-shadow:
-    0 4px 16px rgba(2,6,23,.25),
-    inset 0 1px 0 rgba(255,255,255,.06);
+  border: 1px solid rgba(148,163,184,.3);
   color: rgba(226,232,240,.96);
   font-weight: 800;
-  line-height: 1;
   white-space: nowrap;
-  letter-spacing: .2px;
+  letter-spacing: .15px;
   text-shadow: 0 6px 18px rgba(2,6,23,.35);
-  transform: translate(-50%, -50%) rotate(var(--rot, 0deg)) scale(var(--s, 1));
-  animation: cloud-bob var(--dur, 7s) ease-in-out var(--delay, 0s) infinite alternate;
+  transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
 }
-
-/* posições/tamanhos (ajustadas para não sobrepor) */
-.lp-cloud li:nth-child(1){ --s:1.55; --rot:-2deg;  --dur:7s;  --delay:0s;  left:18%; top:14%; }
-.lp-cloud li:nth-child(2){ --s:1.20; --rot: 1deg;  --dur:6.5s; --delay:.2s; left:52%; top:18%; }
-.lp-cloud li:nth-child(3){ --s:1.10; --rot:-1deg;  --dur:7.5s; --delay:.5s; left:82%; top:28%; }
-.lp-cloud li:nth-child(4){ --s:1.25; --rot:.6deg;  --dur:6.8s; --delay:.1s; left:28%; top:48%; }
-.lp-cloud li:nth-child(5){ --s:1.45; --rot:-.8deg; --dur:7.2s; --delay:.3s; left:56%; top:44%; }
-.lp-cloud li:nth-child(6){ --s:1.05; --rot:.4deg;  --dur:6.2s; --delay:.6s; left:82%; top:56%; }
-.lp-cloud li:nth-child(7){ --s:1.15; --rot:-.4deg; --dur:6.9s; --delay:.4s; left:22%; top:70%; }
-.lp-cloud li:nth-child(8){ --s:1.10; --rot:.2deg;  --dur:7.1s; --delay:.7s; left:50%; top:72%; }
-.lp-cloud li:nth-child(9){ --s:1.35; --rot:-1deg;  --dur:7.6s; --delay:.25s; left:76%; top:76%; }
-
-/* animação "flutuar" */
-@keyframes cloud-bob{
-  0%   { transform: translate(-50%, calc(-50% - 4px)) rotate(var(--rot,0)) scale(var(--s,1)); }
-  100% { transform: translate(-50%, calc(-50% + 6px)) rotate(var(--rot,0)) scale(var(--s,1)); }
-}
-
-/* hover sutil */
-.lp-cloud li:hover{
+.lp-tag:hover{
   filter: brightness(1.08);
-  box-shadow:
-    0 8px 28px rgba(2,6,23,.35),
-    inset 0 1px 0 rgba(255,255,255,.08);
+  transform: scale(1.03) translateY(-1px);
 }
 
-/* Fallback responsivo: vira grid limpo em telas menores */
-@media (max-width: 1200px){
-  .lp-cloud{
-    position: static;
-    height: auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 14px;
-  }
-  .lp-cloud li{
-    position: relative;
-    transform: none;
-    animation: none;
-    left: auto; top: auto;
-  }
+/* pontinho azul */
+.lp-dot{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #3b82f6; display: inline-block;
+  box-shadow: 0 0 0 3px rgba(59,130,246,.15);
 }
 
 /* ===== Right/form side ===== */
