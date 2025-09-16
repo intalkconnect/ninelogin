@@ -124,7 +124,7 @@ export default function LoginPage() {
           </div>
 
           <h3 className="lp-why-title">9 motivos para escolher o NineChat</h3>
-          <ul className="lp-why9">
+          <ul className="lp-cloud">
             <li><span className="lp-dot" /> Segurança de ponta a ponta</li>
             <li><span className="lp-dot" /> SSO e MFA para acesso seguro</li>
             <li><span className="lp-dot" /> Performance em tempo real</li>
@@ -245,5 +245,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-
