@@ -3,21 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import './styles/Login.css';
 
-/** ==== BASE DO BACKEND ====
- * Usa VITE_APP_LOGIN_BACKEND_URL do .env
- * Aceita valores com ou sem "https://"
- * Gera URL absoluta SEM barra final
- */
+/** ==== BASE DO BACKEND ==== */
 const RAW_BACKEND = (import.meta.env.VITE_APP_LOGIN_BACKEND_URL || '').trim();
 const API_BASE = (RAW_BACKEND.startsWith('http') ? RAW_BACKEND : `https://${RAW_BACKEND}`)
   .replace(/\/+$/, '');
+const apiUrl = (p = '') => `${API_BASE}/${String(p).replace(/^\/+/, '')}`;
 
-function apiUrl(path = '') {
-  const p = String(path).replace(/^\/+/, '');
-  return `${API_BASE}/${p}`;
-}
-
-/** helper para parse seguro da resposta */
+/** parse seguro */
 async function parseResponse(res) {
   const ct = (res.headers.get('content-type') || '').toLowerCase();
   if (ct.includes('application/json')) return res.json();
@@ -27,7 +19,6 @@ async function parseResponse(res) {
 
 export default function LoginPage() {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -38,7 +29,6 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [serverError, setServerError] = useState('');
 
-  /* Prefill + CSRF */
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
     if (savedEmail) { setEmail(savedEmail); setRememberMe(true); }
@@ -56,15 +46,12 @@ export default function LoginPage() {
     })();
   }, []);
 
-  /* Validação simples */
   const validate = () => {
     const next = { email: '', password: '' };
     if (!email) next.email = 'Email é obrigatório';
     else if (!/\S+@\S+\.\S+/.test(email)) next.email = 'Email inválido';
-
     if (!password) next.password = 'Senha é obrigatória';
     else if (password.length < 6) next.password = 'Senha deve ter pelo menos 6 caracteres';
-
     setErrors(next);
     return !next.email && !next.password;
   };
@@ -88,22 +75,16 @@ export default function LoginPage() {
       });
 
       const data = await parseResponse(res);
-
       if (!res.ok) {
-        const msg =
-          (data && (data.message || data.error)) ||
-          (typeof data?._raw === 'string' ? data._raw : 'Falha no login');
+        const msg = (data && (data.message || data.error)) || (typeof data?._raw === 'string' ? data._raw : 'Falha no login');
         throw new Error(msg);
       }
 
       if (rememberMe) localStorage.setItem('rememberedEmail', email);
       else localStorage.removeItem('rememberedEmail');
 
-      if (data?.redirectUrl) {
-        window.location.href = data.redirectUrl;
-      } else {
-        setServerError('URL de redirecionamento não recebida');
-      }
+      if (data?.redirectUrl) window.location.href = data.redirectUrl;
+      else setServerError('URL de redirecionamento não recebida');
     } catch (err) {
       setServerError(err?.message || 'Erro ao fazer login');
     } finally {
@@ -124,16 +105,18 @@ export default function LoginPage() {
           </div>
 
           <h3 className="lp-why-title">9 motivos para escolher o NineChat</h3>
+
+          {/* NU V E M  */}
           <ul className="lp-cloud">
-            <li><span className="lp-dot" /> Segurança de ponta a ponta</li>
-            <li><span className="lp-dot" /> SSO e MFA para acesso seguro</li>
-            <li><span className="lp-dot" /> Performance em tempo real</li>
-            <li><span className="lp-dot" /> Atendimentos omnichannel</li>
-            <li><span className="lp-dot" /> Painéis e métricas acionáveis</li>
-            <li><span className="lp-dot" /> Integrações corporativas</li>
-            <li><span className="lp-dot" /> Permissões e auditoria</li>
-            <li><span className="lp-dot" /> Escalabilidade e resiliência</li>
-            <li><span className="lp-dot" /> Suporte humano quando precisar</li>
+            <li>Segurança de ponta a ponta</li>
+            <li>SSO e MFA para acesso seguro</li>
+            <li>Performance em tempo real</li>
+            <li>Atendimentos omnichannel</li>
+            <li>Painéis e métricas acionáveis</li>
+            <li>Integrações corporativas</li>
+            <li>Permissões e auditoria</li>
+            <li>Escalabilidade e resiliência</li>
+            <li>Suporte humano quando precisar</li>
           </ul>
         </div>
       </div>
@@ -210,18 +193,10 @@ export default function LoginPage() {
               </button>
             </div>
 
-            {serverError && (
-              <div className="lp-alert">
-                {serverError}
-              </div>
-            )}
+            {serverError && <div className="lp-alert">{serverError}</div>}
 
             <button type="submit" disabled={isLoading} className="lp-btn">
-              {isLoading ? (
-                <>
-                  <span className="lp-spinner" /> Autenticando...
-                </>
-              ) : 'Entrar'}
+              {isLoading ? (<><span className="lp-spinner" /> Autenticando...</>) : 'Entrar'}
             </button>
 
             <div className="lp-sec">
@@ -230,10 +205,7 @@ export default function LoginPage() {
           </form>
 
           <div className="lp-footlinks">
-            <p>
-              Não possui acesso?{' '}
-              <a href="#" className="lp-link-plain">Solicitar credenciais</a>
-            </p>
+            <p>Não possui acesso? <a href="#" className="lp-link-plain">Solicitar credenciais</a></p>
             <div className="lp-footrow">
               <a href="#" className="lp-link-plain">Política de Privacidade</a>
               <a href="#" className="lp-link-plain">Termos de Uso</a>
