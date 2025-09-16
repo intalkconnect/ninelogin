@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import './styles/Login.css';
 
@@ -15,9 +15,6 @@ async function parseResponse(res) {
   try { return JSON.parse(text); } catch { return { _raw: text }; }
 }
 
-/* hash simples p/ variar rotação/delay de forma estável */
-const hash = (s) => [...String(s)].reduce((a, c) => a + c.charCodeAt(0), 0);
-
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -28,7 +25,6 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [serverError, setServerError] = useState('');
-  const [activeTag, setActiveTag] = useState(null);
 
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
@@ -93,81 +89,13 @@ export default function LoginPage() {
     }
   };
 
-  /* ====== TAG CLOUD DATA ====== */
-  const tags = useMemo(() => ([
-    { value: 'Segurança de ponta a ponta',       count: 48 },
-    { value: 'SSO e MFA para acesso seguro',     count: 40 },
-    { value: 'Performance em tempo real',        count: 36 },
-    { value: 'Atendimentos omnichannel',         count: 32 },
-    { value: 'Painéis e métricas acionáveis',    count: 30 },
-    { value: 'Integrações corporativas',         count: 28 },
-    { value: 'Permissões e auditoria',           count: 26 },
-    { value: 'Escalabilidade e resiliência',     count: 38 },
-    { value: 'Suporte humano quando precisar',   count: 29 },
-  ]), []);
-
-  /* Simulando o renderer da TagCloud */
-  const TagCloudSimulator = ({ tags, onTagClick, activeTag }) => {
-    const colors = ['#93c5fd', '#a5b4fc', '#c4b5fd', '#f0abfc', '#fda4af', '#fbbf24', '#34d399', '#60a5fa'];
-    
-    return (
-      <div className="tag-cloud lp-tagcloud">
-        {tags.map((tag, index) => {
-          const h = hash(tag.value);
-          const rot = (h % 11) - 5; // -5..+5°
-          const delay = (h % 600) / 1000; // 0..0.599s
-          const size = Math.min(16 + (tag.count / 48) * 22, 38); // 16-38px baseado no count
-          const color = colors[index % colors.length];
-          const selected = activeTag === tag.value;
-          
-          return (
-            <span
-              key={tag.value}
-              className={`lp-tagcloud-tag ${selected ? 'is-active' : ''}`}
-              style={{
-                fontSize: `${size}px`,
-                color: color,
-                transform: `rotate(${rot}deg)`,
-                animationDelay: `${delay}s`,
-                '--rot': `${rot}deg`
-              }}
-              title={tag.value}
-              onClick={() => onTagClick(selected ? null : tag.value)}
-              onDoubleClick={() => onTagClick(null)}
-            >
-              <i className="lp-dot" />
-              {tag.value}
-            </span>
-          );
-        })}
-      </div>
-    );
-  };
-
   return (
     <div className="lp-shell">
-      
-
-      {/* Lado esquerdo - branding */}
+      {/* Lado esquerdo - branding (fundo #003e6a + logo centralizada + imagem centralizada) */}
       <div className="lp-brand">
-        <div className="lp-brand-gradient" />
-        <div className="lp-brand-inner">
-          <div className="lp-hero">
-            <img src="/logo-front.png" alt="NineChat" className="lp-hero-logo" />
-            <h1 className="lp-hero-title">NineChat</h1>
-            <p className="lp-hero-sub">Plataforma empresarial de comunicação e colaboração</p>
-          </div>
-
-          <h3 className="lp-why-title">9 motivos para escolher o NineChat</h3>
-
-          {/* TagCloud simulada com efeitos do pacote */}
-          <div className="lp-cloud-box">
-            <TagCloudSimulator
-              tags={tags}
-              onTagClick={setActiveTag}
-              activeTag={activeTag}
-            />
-          </div>
+        <div className="lp-brand-inner lp-center">
+          <img src="/logo-front.png" alt="NineChat" className="lp-brand-logo" />
+          <div className="lp-brand-figure" role="img" aria-label="Ilustração do portal" />
         </div>
       </div>
 
@@ -233,11 +161,7 @@ export default function LoginPage() {
                 <span>Manter conectado</span>
               </label>
 
-              <button
-                type="button"
-                className="lp-link"
-                disabled={isLoading}
-              >
+              <button type="button" className="lp-link" disabled={isLoading}>
                 Esqueceu a senha?
               </button>
             </div>
