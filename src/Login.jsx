@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, EyeOff, Mail, Building2, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css';
-import logo from './assets/ninechat_logo_icons.png';
+import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
+import './styles/Login.css';
 
 /** ==== BASE DO BACKEND ====
  * Usa VITE_APP_LOGIN_BACKEND_URL do .env
@@ -27,17 +26,17 @@ async function parseResponse(res) {
 }
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [csrfToken, setCsrfToken] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
 
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [serverError, setServerError] = useState('');
-
-  const navigate = useNavigate();
 
   /* Prefill + CSRF */
   useEffect(() => {
@@ -118,19 +117,23 @@ export default function LoginPage() {
       <div className="lp-brand">
         <div className="lp-brand-gradient" />
         <div className="lp-brand-inner">
-          <div className="lp-logo-hero">
-            <div className="lp-logo-badge">
-              {/* Usa seu ícone, mas mantém fallback com Building2 */}
-              {logo ? <img src={logo} alt="NineChat" /> : <Building2 />}
-            </div>
-            <h1>NineChat</h1>
-            <p>Plataforma empresarial de comunicação e colaboração</p>
+          <div className="lp-hero">
+            <img src="/logo-front.png" alt="NineChat" className="lp-hero-logo" />
+            <h1 className="lp-hero-title">NineChat</h1>
+            <p className="lp-hero-sub">Plataforma empresarial de comunicação e colaboração</p>
           </div>
 
-          <ul className="lp-bullets">
-            <li><span className="lp-dot" /> Comunicação segura e criptografada</li>
-            <li><span className="lp-dot" /> Gestão avançada de equipes</li>
-            <li><span className="lp-dot" /> Integração com sistemas corporativos</li>
+          <h3 className="lp-why-title">9 motivos para escolher o NineChat</h3>
+          <ul className="lp-why9">
+            <li><span className="lp-dot" /> Segurança de ponta a ponta</li>
+            <li><span className="lp-dot" /> SSO e MFA para acesso seguro</li>
+            <li><span className="lp-dot" /> Performance em tempo real</li>
+            <li><span className="lp-dot" /> Atendimentos omnichannel</li>
+            <li><span className="lp-dot" /> Painéis e métricas acionáveis</li>
+            <li><span className="lp-dot" /> Integrações corporativas</li>
+            <li><span className="lp-dot" /> Permissões e auditoria</li>
+            <li><span className="lp-dot" /> Escalabilidade e resiliência</li>
+            <li><span className="lp-dot" /> Suporte humano quando precisar</li>
           </ul>
         </div>
       </div>
@@ -140,10 +143,10 @@ export default function LoginPage() {
         <div className="lp-form-wrap">
           <div className="lp-form-head">
             <div className="lp-form-logo-mobile">
-              {logo ? <img src={logo} alt="NineChat" /> : <Building2 />}
+              <img src="/logo-front.png" alt="NineChat" />
             </div>
             <h2>Acesse sua conta</h2>
-            <p>Faça login em sua conta</p>
+            <p>Entre com suas credenciais corporativas</p>
           </div>
 
           <form className="lp-card" onSubmit={handleSubmit} noValidate>
@@ -158,7 +161,7 @@ export default function LoginPage() {
                   placeholder="usuario@empresa.com"
                   disabled={isLoading}
                 />
-                <span className="lp-input-icon"><Mail /></span>
+                <span className="lp-input-icon"><Mail size={20} aria-hidden /></span>
               </div>
               {errors.email && <p className="lp-error">{errors.email}</p>}
             </div>
@@ -180,7 +183,7 @@ export default function LoginPage() {
                   onClick={() => setShowPassword(v => !v)}
                   aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                 >
-                  {showPassword ? <EyeOff /> : <Eye />}
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
               {errors.password && <p className="lp-error">{errors.password}</p>}
@@ -222,14 +225,23 @@ export default function LoginPage() {
             </button>
 
             <div className="lp-sec">
-              <Shield /> <span>Conexão protegida por SSL/TLS</span>
+              <Shield size={16} aria-hidden /> <span>Conexão protegida por SSL/TLS</span>
             </div>
           </form>
 
+          <div className="lp-footlinks">
+            <p>
+              Não possui acesso?{' '}
+              <a href="#" className="lp-link-plain">Solicitar credenciais</a>
+            </p>
+            <div className="lp-footrow">
+              <a href="#" className="lp-link-plain">Política de Privacidade</a>
+              <a href="#" className="lp-link-plain">Termos de Uso</a>
+              <a href="#" className="lp-link-plain">Suporte</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-
