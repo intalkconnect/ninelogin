@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './Login.css';
-import logo from './assets/ninechat_logo_icons.png';
+import { Eye, EyeOff, Mail, Building2, Shield } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import './LoginPage.css';
+import logo from './assets/ninechat_logo_icons.png';
 
 /** ==== BASE DO BACKEND ====
  * Usa VITE_APP_LOGIN_BACKEND_URL do .env
@@ -25,46 +26,56 @@ async function parseResponse(res) {
   try { return JSON.parse(text); } catch { return { _raw: text }; }
 }
 
-export default function Login() {
+export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [csrfToken, setCsrfToken] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [csrfToken, setCsrfToken] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [errors, setErrors] = useState({ email: '', password: '' });
+  const [serverError, setServerError] = useState('');
+
   const navigate = useNavigate();
 
+  /* Prefill + CSRF */
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
-    if (savedEmail) {
-      setEmail(savedEmail);
-      setRememberMe(true);
-    }
+    if (savedEmail) { setEmail(savedEmail); setRememberMe(true); }
 
     (async () => {
       try {
-        const res = await fetch(apiUrl('/api/csrf-token'), {
-          credentials: 'include',
-        });
+        const res = await fetch(apiUrl('/api/csrf-token'), { credentials: 'include' });
         const data = await parseResponse(res);
         if (!res.ok || !data?.token) throw new Error('CSRF inválido');
         setCsrfToken(data.token);
       } catch (err) {
         console.error('CSRF Error:', err);
-        setError('Falha na configuração de segurança');
+        setServerError('Falha na configuração de segurança');
       }
     })();
   }, []);
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      setError('Email e senha são obrigatórios');
-      return;
-    }
+  /* Validação simples */
+  const validate = () => {
+    const next = { email: '', password: '' };
+    if (!email) next.email = 'Email é obrigatório';
+    else if (!/\S+@\S+\.\S+/.test(email)) next.email = 'Email inválido';
 
-    setLoading(true);
-    setError('');
+    if (!password) next.password = 'Senha é obrigatória';
+    else if (password.length < 6) next.password = 'Senha deve ter pelo menos 6 caracteres';
+
+    setErrors(next);
+    return !next.email && !next.password;
+  };
+
+  const handleSubmit = async (e) => {
+    e?.preventDefault?.();
+    if (!validate()) return;
+
+    setIsLoading(true);
+    setServerError('');
 
     try {
       const res = await fetch(apiUrl('/api/login'), {
@@ -73,8 +84,8 @@ export default function Login() {
           'Content-Type': 'application/json',
           'CSRF-Token': csrfToken || '',
         },
+        credentials: 'include',
         body: JSON.stringify({ email, password, rememberMe }),
-        credentials: 'include'
       });
 
       const data = await parseResponse(res);
@@ -92,144 +103,142 @@ export default function Login() {
       if (data?.redirectUrl) {
         window.location.href = data.redirectUrl;
       } else {
-        setError('URL de redirecionamento não recebida');
+        setServerError('URL de redirecionamento não recebida');
       }
     } catch (err) {
-      setError(err?.message || 'Erro ao fazer login');
+      setServerError(err?.message || 'Erro ao fazer login');
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter' && !loading) handleLogin();
-  };
-
   return (
-    <div className="login-container">
-      <div className="bg-pattern-1"></div>
-      <div className="bg-pattern-2"></div>
-
-      <div className="login-card">
-        <img src={logo} alt="NineChat" className="login-logo" />
-
-        <div className="login-header">
-          <h2 className="login-title">Bem-vindo(a) ao NineChat</h2>
-          <p className="login-subtitle">Acesse sua conta</p>
-        </div>
-
-        <div className="login-form">
-          <div className="input-group">
-            <label htmlFor="email" className="input-label">Email</label>
-            <div className="input-wrapper">
-              <input
-                id="email"
-                type="email"
-                placeholder="seu@empresa.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                onKeyDown={handleKeyDown}
-                disabled={loading}
-                className="login-input"
-              />
-              <div className="input-icon">
-                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207" />
-                </svg>
-              </div>
+    <div className="lp-shell">
+      {/* Lado esquerdo - branding */}
+      <div className="lp-brand">
+        <div className="lp-brand-gradient" />
+        <div className="lp-brand-inner">
+          <div className="lp-logo-hero">
+            <div className="lp-logo-badge">
+              {/* Usa seu ícone, mas mantém fallback com Building2 */}
+              {logo ? <img src={logo} alt="NineChat" /> : <Building2 />}
             </div>
+            <h1>NineChat</h1>
+            <p>Plataforma empresarial de comunicação e colaboração</p>
           </div>
 
-          <div className="input-group">
-            <label htmlFor="password" className="input-label">Senha</label>
-            <div className="input-wrapper">
-              <input
-                id="password"
-                type={showPassword ? 'text' : 'password'}
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={handleKeyDown}
-                disabled={loading}
-                className="login-input password-input"
-              />
+          <ul className="lp-bullets">
+            <li><span className="lp-dot" /> Comunicação segura e criptografada</li>
+            <li><span className="lp-dot" /> Gestão avançada de equipes</li>
+            <li><span className="lp-dot" /> Integração com sistemas corporativos</li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Lado direito - formulário */}
+      <div className="lp-form-side">
+        <div className="lp-form-wrap">
+          <div className="lp-form-head">
+            <div className="lp-form-logo-mobile">
+              {logo ? <img src={logo} alt="NineChat" /> : <Building2 />}
+            </div>
+            <h2>Acesse sua conta</h2>
+            <p>Entre com suas credenciais corporativas</p>
+          </div>
+
+          <form className="lp-card" onSubmit={handleSubmit} noValidate>
+            <div className="lp-field">
+              <label htmlFor="email">Endereço de email</label>
+              <div className={`lp-input-wrap ${errors.email ? 'has-error' : ''}`}>
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); if (errors.email) setErrors(s => ({ ...s, email: '' })); }}
+                  placeholder="usuario@empresa.com"
+                  disabled={isLoading}
+                />
+                <span className="lp-input-icon"><Mail /></span>
+              </div>
+              {errors.email && <p className="lp-error">{errors.email}</p>}
+            </div>
+
+            <div className="lp-field">
+              <label htmlFor="password">Senha</label>
+              <div className={`lp-input-wrap ${errors.password ? 'has-error' : ''}`}>
+                <input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); if (errors.password) setErrors(s => ({ ...s, password: '' })); }}
+                  placeholder="Digite sua senha"
+                  disabled={isLoading}
+                />
+                <button
+                  type="button"
+                  className="lp-eye"
+                  onClick={() => setShowPassword(v => !v)}
+                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                >
+                  {showPassword ? <EyeOff /> : <Eye />}
+                </button>
+              </div>
+              {errors.password && <p className="lp-error">{errors.password}</p>}
+            </div>
+
+            <div className="lp-row">
+              <label className="lp-check">
+                <input
+                  type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  disabled={isLoading}
+                />
+                <span>Manter conectado</span>
+              </label>
+
               <button
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="password-toggle"
+                className="lp-link"
+                onClick={() => navigate('/auth/forgot-password')}
+                disabled={isLoading}
               >
-                {showPassword ? (
-                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21" />
-                  </svg>
-                ) : (
-                  <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                )}
+                Esqueceu a senha?
               </button>
             </div>
-          </div>
 
-          <div className="remember-row">
-            <div className="remember-me">
-              <input
-                id="rememberMe"
-                type="checkbox"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-                disabled={loading}
-                className="remember-checkbox"
-              />
-              <label htmlFor="rememberMe" className="checkbox-label">Lembrar-me</label>
-            </div>
-            <button
-              type="button"
-              className="forgot-password"
-              onClick={() => navigate('/auth/forgot-password')}
-              disabled={loading}
-            >
-              Esqueceu a senha?
-            </button>
-          </div>
-
-          {error && (
-            <div className="error-message">
-              <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20" className="error-icon">
-                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-              </svg>
-              <span>{error}</span>
-            </div>
-          )}
-
-          <button
-            onClick={handleLogin}
-            disabled={loading}
-            className={`login-button ${loading ? 'loading' : ''}`}
-          >
-            {loading ? (
-              <div className="loading-content">
-                <div className="spinner"></div>
-                <span>Entrando...</span>
+            {serverError && (
+              <div className="lp-alert">
+                {serverError}
               </div>
-            ) : (
-              'Entrar'
             )}
-          </button>
-        </div>
 
-        <div className="login-footer">
-          <p className="footer-text">Protegido por criptografia de ponta a ponta</p>
-          <div className="security-indicator">
-            <span className="lock-icon">🔒</span>
-            <span className="security-text">Conexão segura</span>
+            <button type="submit" disabled={isLoading} className="lp-btn">
+              {isLoading ? (
+                <>
+                  <span className="lp-spinner" /> Autenticando...
+                </>
+              ) : 'Entrar'}
+            </button>
+
+            <div className="lp-sec">
+              <Shield /> <span>Conexão protegida por SSL/TLS</span>
+            </div>
+          </form>
+
+          <div className="lp-footlinks">
+            <p>
+              Não possui acesso?{' '}
+              <a href="#" className="lp-link-plain">Solicitar credenciais</a>
+            </p>
+            <div className="lp-footrow">
+              <a href="#" className="lp-link-plain">Política de Privacidade</a>
+              <a href="#" className="lp-link-plain">Termos de Uso</a>
+              <a href="#" className="lp-link-plain">Suporte</a>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
-
-
-
