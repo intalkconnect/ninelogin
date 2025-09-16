@@ -1,11 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
-import { TagCloud } from 'react-tagcloud';
 import './styles/Login.css';
 
 /* =========== BASE DO BACKEND =========== */
-const RAW_BACKEND = (import.meta.env.VITE_APP_LOGIN_BACKEND_URL || '').trim();
+const RAW_BACKEND = (import.meta.env?.VITE_APP_LOGIN_BACKEND_URL || '').trim();
 const API_BASE = (RAW_BACKEND.startsWith('http') ? RAW_BACKEND : `https://${RAW_BACKEND}`)
   .replace(/\/+$/, '');
 const apiUrl = (p = '') => `${API_BASE}/${String(p).replace(/^\/+/, '')}`;
@@ -21,8 +19,6 @@ async function parseResponse(res) {
 const hash = (s) => [...String(s)].reduce((a, c) => a + c.charCodeAt(0), 0);
 
 export default function LoginPage() {
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -110,35 +106,48 @@ export default function LoginPage() {
     { value: 'Suporte humano quando precisar',   count: 29 },
   ]), []);
 
-  /* renderer com efeitos e respeito às cores geradas pela lib (3º arg) */
-  const tagRenderer = (tag, size, color) => {
-    const h = hash(tag.value);
-    const rot = (h % 11) - 5;           // -5..+5°
-    const delay = (h % 600) / 1000;     // 0..0.599s
-
-    const selected = activeTag === tag.value;
+  /* Simulando o renderer da TagCloud */
+  const TagCloudSimulator = ({ tags, onTagClick, activeTag }) => {
+    const colors = ['#93c5fd', '#a5b4fc', '#c4b5fd', '#f0abfc', '#fda4af', '#fbbf24', '#34d399', '#60a5fa'];
+    
     return (
-      <span
-        key={tag.value}
-        className={`lp-tagcloud-tag ${selected ? 'is-active' : ''}`}
-        style={{
-          fontSize: size,
-          color,
-          transform: `rotate(${rot}deg)`,
-          animationDelay: `${delay}s`
-        }}
-        title={tag.value}
-        onClick={() => setActiveTag(selected ? null : tag.value)}
-        onDoubleClick={() => setActiveTag(null)}
-      >
-        <i className="lp-dot" />
-        {tag.value}
-      </span>
+      <div className="tag-cloud lp-tagcloud">
+        {tags.map((tag, index) => {
+          const h = hash(tag.value);
+          const rot = (h % 11) - 5; // -5..+5°
+          const delay = (h % 600) / 1000; // 0..0.599s
+          const size = Math.min(16 + (tag.count / 48) * 22, 38); // 16-38px baseado no count
+          const color = colors[index % colors.length];
+          const selected = activeTag === tag.value;
+          
+          return (
+            <span
+              key={tag.value}
+              className={`lp-tagcloud-tag ${selected ? 'is-active' : ''}`}
+              style={{
+                fontSize: `${size}px`,
+                color: color,
+                transform: `rotate(${rot}deg)`,
+                animationDelay: `${delay}s`,
+                '--rot': `${rot}deg`
+              }}
+              title={tag.value}
+              onClick={() => onTagClick(selected ? null : tag.value)}
+              onDoubleClick={() => onTagClick(null)}
+            >
+              <i className="lp-dot" />
+              {tag.value}
+            </span>
+          );
+        })}
+      </div>
     );
   };
 
   return (
     <div className="lp-shell">
+      
+
       {/* Lado esquerdo - branding */}
       <div className="lp-brand">
         <div className="lp-brand-gradient" />
@@ -151,16 +160,12 @@ export default function LoginPage() {
 
           <h3 className="lp-why-title">9 motivos para escolher o NineChat</h3>
 
-          {/* TagCloud com efeitos do pacote */}
+          {/* TagCloud simulada com efeitos do pacote */}
           <div className="lp-cloud-box">
-            <TagCloud
+            <TagCloudSimulator
               tags={tags}
-              minSize={16}
-              maxSize={38}
-              shuffle={true}
-              colorOptions={{ hue: 'blue', luminosity: 'light' }} /* efeitos de cor do pacote */
-              renderer={tagRenderer}
-              className="tag-cloud lp-tagcloud"
+              onTagClick={setActiveTag}
+              activeTag={activeTag}
             />
           </div>
         </div>
@@ -231,7 +236,6 @@ export default function LoginPage() {
               <button
                 type="button"
                 className="lp-link"
-                onClick={() => navigate('/auth/forgot-password')}
                 disabled={isLoading}
               >
                 Esqueceu a senha?
@@ -262,4 +266,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
