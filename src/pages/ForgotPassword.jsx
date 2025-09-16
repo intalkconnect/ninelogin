@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../Login.css';
+import '../styles/Login.css';
 import logo from '../assets/ninechat_logo_icons.png';
 import { Link } from 'react-router-dom';
 
