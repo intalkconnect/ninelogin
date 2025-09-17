@@ -114,10 +114,10 @@ body { margin: 0; }
 .lp-form-head p{ color:var(--muted); margin:0; }
 
 .lp-form-logo-mobile{
-  width:48px; height:48px; border-radius:10px; margin:0 auto 16px;
-  display:flex; align-items:center; justify-content:center; background:var(--blue);
+  width:80px; height:80px; margin:0 auto 16px;
+  display:flex; align-items:center; justify-content:center;
 }
-.lp-form-logo-mobile img{ width:26px; height:26px; display:block; }
+.lp-form-logo-mobile img{ width:80px; height:80px; display:block; }
 
 .lp-card{
   background:#fff; border:1px solid var(--border);
