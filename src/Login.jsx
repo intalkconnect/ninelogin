@@ -96,9 +96,13 @@ export default function LoginPage() {
   return (
     <div className="lp-shell">
       {/* Lado esquerdo - branding (fundo sólido #002755 + logo + PNG transparente) */}
-<div className="lp-brand" style={{ "--brand-bg": `url(${bkg})` }}>
-  <div className="lp-brand-inner lp-center">{/* pode ficar vazio */}</div>
+<div
+  className="lp-brand"
+  style={{ "--brand-bg": `url(${bkg})`, "--brand-shift-x": "-140px" }} // ajuste aqui (-/+) 
+>
+  <div className="lp-brand-inner lp-center" />
 </div>
+
 
       {/* Lado direito - formulário */}
       <div className="lp-form-side">
@@ -191,6 +195,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 
