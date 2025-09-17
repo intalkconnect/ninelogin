@@ -19,25 +19,18 @@ body { margin: 0; }
 }
 @media (min-width: 1024px){ html, body { overflow: hidden; } }
 
-/* LEFT (fundo #003e6a com leve gradiente) */
+/* LEFT — fundo chapado (sem degradê) */
 .lp-brand{
   display:none;
   width:50%;
   position:relative;
   overflow:hidden;
-  background:
-    radial-gradient(1200px 800px at 50% 0%, rgba(255,255,255,.06), transparent 60%),
-    linear-gradient(180deg, #003e6a 0%, #00365d 100%);
+  background:#002755; /* <- cor uniforme */
 }
 @media (min-width:1024px){ .lp-brand{ display:block; } }
 
-/* overlay sutil para “fundir” */
-.lp-brand::after{
-  content:'';
-  position:absolute; inset:0;
-  pointer-events:none;
-  background:#002755;
-}
+/* sem overlay/gradiente */
+.lp-brand::after{ content:none; }
 
 .lp-brand-inner{
   position:relative; z-index:1;
@@ -48,17 +41,20 @@ body { margin: 0; }
 }
 .lp-center{ align-items:center; justify-content:center; text-align:center; gap:24px; }
 
-/* Logo centralizada */
+/* Logo */
 .lp-brand-logo{
   width:200px; height:auto;
   filter: drop-shadow(0 10px 24px rgba(0,0,0,.25));
 }
 
-/* IMAGEM VINDO DO JSX (PNG transparente) */
+/* Imagem PNG transparente (importada no JSX) */
 .lp-figure-img{
   display:block;
   width:min(820px, 90%);
   height:auto;
+  user-select:none;
+  pointer-events:none;
+  /* sombra suave para “assentar” sem parecer card */
   filter: drop-shadow(0 20px 40px rgba(0,0,0,.22));
 }
 
