@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import './styles/Login.css';
+import bkg from './assets/bkg.png';
 
 /* =========== BASE DO BACKEND =========== */
 const RAW_BACKEND = (import.meta.env?.VITE_APP_LOGIN_BACKEND_URL || '').trim();
@@ -97,7 +98,7 @@ export default function LoginPage() {
           <img src="/logo-front.png" alt="NineChat" className="lp-brand-logo" />
           {/* 🔽 imagem agora vem do JSX (coloque /public/bkg-portal.png) */}
           <img
-            src="/bkg.png"
+            src={bkg}
             alt="Ilustração do portal com canais omnichannel"
             className="lp-figure-img"
             loading="eager"
@@ -197,4 +198,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
