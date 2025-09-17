@@ -51,9 +51,7 @@ export default function LoginPage() {
     (async () => {
       // 1) Checa se já está autenticado
       try {
-        const who = await fetch(apiUrl('/api/whoami'), {
-          credentials: 'include',
-        });
+    const who = await fetch(apiUrl('/api/whoami?soft=1'), { credentials: 'include' });
         if (who.ok) {
           const data = await parseResponse(who);
           return doRedirect(data?.redirectUrl);
@@ -237,3 +235,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
