@@ -1,7 +1,7 @@
-/* ================================
-   Login Omnichannel — CSS Completo
-   Left side com background cover
-   ================================ */
+/* =========================================
+   Login Omnichannel — CSS Completo (cover)
+   Esquerda com imagem ajustável + Direita menor
+   ========================================= */
 
 :root{
   --bg: #f8fafc;
@@ -11,8 +11,11 @@
   --blue: #2563eb;
   --blue-700: #1d4ed8;
 
-  /* 🔁 Defina aqui o caminho da sua imagem de fundo */
+  /* Fallback do caminho da imagem (pode vir via inline style no JSX) */
   --brand-bg: url("/assets/omnichannel-left-bg.jpg");
+
+  /* Deslocamento horizontal da imagem (negativo puxa mais p/ a esquerda) */
+  --brand-shift-x: -140px;
 }
 
 html, body, #root { height: 100%; }
@@ -34,8 +37,8 @@ body { margin: 0; }
    LEFT — Lateral com imagem cover
    ================================ */
 .lp-brand{
-  display: none;                 /* some em mobile */
-  width: 50%;
+  display: none;                  /* esconde em mobile */
+  width: 50%;                     /* base; será ajustado por breakpoint */
   position: relative;
   overflow: hidden;
 
@@ -45,45 +48,45 @@ body { margin: 0; }
   /* imagem de fundo */
   background-image: var(--brand-bg);
   background-repeat: no-repeat;
-  background-size: cover;        /* preenche toda a área */
-  background-position: left center; /* foca mais à esquerda */
+  background-size: cover;         /* cobre toda a área */
+  /* foco mais à esquerda (controlável) */
+  background-position: left var(--brand-shift-x) center;
 }
 
 @media (min-width:1024px){
-  .lp-brand{ display:block; }
+  .lp-brand{ display:block; flex: 0 0 58%; }
+  .lp-form-side{ flex: 0 0 42%; }
+}
+@media (min-width:1440px){
+  .lp-brand{ flex-basis: 62%; }
+  .lp-form-side{ flex-basis: 38%; }
+}
+@media (min-width:1920px){
+  .lp-brand{ flex-basis: 66%; }
+  .lp-form-side{ flex-basis: 34%; }
 }
 
 /* sem overlay/gradiente */
 .lp-brand::after{ content: none; }
 
-/* conteúdo interno (mantém padding se precisar colocar algo futuro) */
+/* conteúdo interno (mantém padding se precisar) */
 .lp-brand-inner{
-  position: relative;
-  z-index: 1;
+  position: relative; z-index: 1;
   min-height: 100%;
   padding: 40px 64px;
   color: #e5e7eb;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
 }
 
 /* centralização opcional */
-.lp-center{
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  gap: 24px;
-}
+.lp-center{ align-items:center; justify-content:center; text-align:center; gap:24px; }
 
-/* se existir alguma <img> na esquerda, esconda para usar só o background */
-.lp-figure-img{
-  display: none !important;
-}
+/* se tiver imagem solta, esconda para usar só o background */
+.lp-figure-img{ display:none !important; }
 
 /* Logo (caso use em algum lugar) */
 .lp-brand-logo{
-  width: 200px;
-  height: auto;
+  width:200px; height:auto;
   filter: drop-shadow(0 10px 24px rgba(0,0,0,.25));
 }
 
@@ -97,100 +100,82 @@ body { margin: 0; }
   justify-content: center;
   padding: 24px;
 }
+@media (min-width:1024px){ .lp-form-side{ padding: 24px 48px; } }
 
-@media (min-width:1024px){
-  .lp-form-side{ padding: 24px 48px; }
-}
-
-.lp-form-wrap{ width: 100%; max-width: 560px; }
-
-.lp-form-head{ text-align: center; margin-bottom: 28px; }
-.lp-form-head h2{ font-size: 28px; margin: 8px 0 6px; }
-.lp-form-head p{ color: var(--muted); margin: 0; }
+.lp-form-wrap{ width:100%; max-width:520px; } /* levemente menor para equilibrar */
+.lp-form-head{ text-align:center; margin-bottom:28px; }
+.lp-form-head h2{ font-size:28px; margin:8px 0 6px; }
+.lp-form-head p{ color:var(--muted); margin:0; }
 
 .lp-form-logo-mobile{
-  width: 48px; height: 48px; border-radius: 10px; margin: 0 auto 16px;
-  display: flex; align-items: center; justify-content: center; background: var(--blue);
+  width:48px; height:48px; border-radius:10px; margin:0 auto 16px;
+  display:flex; align-items:center; justify-content:center; background:var(--blue);
 }
-.lp-form-logo-mobile img{ width: 26px; height: 26px; display: block; }
+.lp-form-logo-mobile img{ width:26px; height:26px; display:block; }
 
 .lp-card{
-  background: #fff; border: 1px solid var(--border);
-  border-radius: 12px; padding: 28px;
-  box-shadow: 0 8px 30px rgba(2,6,23,.06);
+  background:#fff; border:1px solid var(--border);
+  border-radius:12px; padding:28px;
+  box-shadow:0 8px 30px rgba(2,6,23,.06);
 }
 
-.lp-field{ margin-bottom: 18px; }
+.lp-field{ margin-bottom:18px; }
 .lp-field label{
-  display: block; font-size: 14px; color: #334155; margin-bottom: 8px; font-weight: 600;
+  display:block; font-size:14px; color:#334155; margin-bottom:8px; font-weight:600;
 }
 
-.lp-input-wrap{ position: relative; }
+.lp-input-wrap{ position:relative; }
 .lp-input-wrap input{
-  width: 100%; padding: 12px 44px 12px 14px;
-  border: 1px solid #cbd5e1; border-radius: 8px;
-  font-size: 14px; color: #0f172a; outline: none;
-  transition: border-color .15s ease, box-shadow .15s ease;
+  width:100%; padding:12px 44px 12px 14px;
+  border:1px solid #cbd5e1; border-radius:8px;
+  font-size:14px; color:#0f172a; outline:none;
+  transition:border-color .15s ease, box-shadow .15s ease;
 }
-.lp-input-wrap input:focus{
-  border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,.15);
-}
-.lp-input-wrap.has-error input{
-  border-color: #fca5a5; box-shadow: 0 0 0 3px rgba(239,68,68,.12);
-}
+.lp-input-wrap input:focus{ border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.15); }
+.lp-input-wrap.has-error input{ border-color:#fca5a5; box-shadow:0 0 0 3px rgba(239,68,68,.12); }
 
-.lp-input-icon{
-  position: absolute; right: 10px; top: 0; bottom: 0;
-  display: flex; align-items: center; color: #94a3b8;
-}
-.lp-input-icon svg{ width: 20px; height: 20px; }
+.lp-input-icon{ position:absolute; right:10px; top:0; bottom:0; display:flex; align-items:center; color:#94a3b8; }
+.lp-input-icon svg{ width:20px; height:20px; }
 
-.lp-eye{
-  position: absolute; right: 4px; top: 0; bottom: 0;
-  display: flex; align-items: center; padding: 0 8px; color: #94a3b8;
-  background: transparent; border: 0; cursor: pointer;
-}
-.lp-eye:hover{ color: #475569; }
+.lp-eye{ position:absolute; right:4px; top:0; bottom:0; display:flex; align-items:center; padding:0 8px; color:#94a3b8; background:transparent; border:0; cursor:pointer; }
+.lp-eye:hover{ color:#475569; }
 
-.lp-error{ margin: 6px 0 0; font-size: 12px; color: #dc2626; }
+.lp-error{ margin:6px 0 0; font-size:12px; color:#dc2626; }
 
-.lp-row{
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 12px; margin: 8px 0 14px;
-}
-.lp-check{ display: flex; align-items: center; gap: 8px; color: #475569; font-size: 14px; }
+.lp-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin:8px 0 14px; }
+.lp-check{ display:flex; align-items:center; gap:8px; color:#475569; font-size:14px; }
 
-.lp-link{ background: none; border: 0; color: #2563eb; font-weight: 600; cursor: pointer; }
-.lp-link:hover{ color: #1d4ed8; }
+.lp-link{ background:none; border:0; color:#2563eb; font-weight:600; cursor:pointer; }
+.lp-link:hover{ color:#1d4ed8; }
 
 .lp-alert{
-  background: #fef2f2; border: 1px solid #fecaca; color: #991b1b;
-  border-radius: 8px; padding: 10px 12px; font-size: 14px; margin-bottom: 12px;
+  background:#fef2f2; border:1px solid #fecaca; color:#991b1b;
+  border-radius:8px; padding:10px 12px; font-size:14px; margin-bottom:12px;
 }
 
 .lp-btn{
-  width: 100%; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-  background: #2563eb; color: #fff; font-weight: 600;
-  padding: 12px 14px; border-radius: 8px; border: 0; cursor: pointer;
+  width:100%; display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  background:#2563eb; color:#fff; font-weight:600;
+  padding:12px 14px; border-radius:8px; border:0; cursor:pointer;
   transition: background .15s ease;
 }
-.lp-btn:hover{ background: #1d4ed8; }
-.lp-btn:disabled{ background: #93c5fd; cursor: not-allowed; }
+.lp-btn:hover{ background:#1d4ed8; }
+.lp-btn:disabled{ background:#93c5fd; cursor:not-allowed; }
 
 .lp-spinner{
-  width: 16px; height: 16px; border-radius: 50%;
-  border: 2px solid rgba(255,255,255,.35); border-top-color: #fff;
-  display: inline-block; animation: lp-spin .9s linear infinite;
+  width:16px; height:16px; border-radius:50%;
+  border:2px solid rgba(255,255,255,.35); border-top-color:#fff;
+  display:inline-block; animation: lp-spin .9s linear infinite;
 }
 @keyframes lp-spin{ to{ transform: rotate(360deg); } }
 
 .lp-sec{
-  margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
-  display: flex; align-items: center; gap: 8px; color: #64748b; font-size: 12px;
+  margin-top:16px; padding-top:16px; border-top:1px solid var(--border);
+  display:flex; align-items:center; gap:8px; color:#64748b; font-size:12px;
 }
 
-.lp-footlinks{ margin-top: 18px; text-align: center; }
-.lp-footlinks p{ color: #475569; font-size: 14px; margin: 0 0 8px; }
-.lp-footrow{ display: flex; justify-content: center; gap: 18px; color: #64748b; font-size: 12px; }
-.lp-link-plain{ color: #64748b; text-decoration: none; }
-.lp-link-plain:hover{ color: #334155; }
+.lp-footlinks{ margin-top:18px; text-align:center; }
+.lp-footlinks p{ color:#475569; font-size:14px; margin:0 0 8px; }
+.lp-footrow{ display:flex; justify-content:center; gap:18px; color:#64748b; font-size:12px; }
+.lp-link-plain{ color:#64748b; text-decoration:none; }
+.lp-link-plain:hover{ color:#334155; }
