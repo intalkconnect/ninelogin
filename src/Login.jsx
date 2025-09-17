@@ -107,6 +107,7 @@ export default function LoginPage() {
 
       <div className="lp-form-side">
         <div className="lp-form-wrap">
+          <div className="lp-form-content">
           <div className="lp-form-head">
             <div className="lp-form-logo-mobile">
               <img src={logo} alt="NineChat" />
@@ -191,22 +192,7 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+        </div>
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
