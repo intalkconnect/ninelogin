@@ -108,8 +108,6 @@ export default function LoginPage() {
   <div className="lp-brand-inner lp-center" />
 </div>
 
-
-      {/* Lado direito - formulário */}
       <div className="lp-form-side">
         <div className="lp-form-wrap">
           <div className="lp-form-head">
@@ -200,6 +198,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 
