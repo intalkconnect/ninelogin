@@ -35,25 +35,41 @@ body { margin: 0; }
    LEFT — Lateral com imagem cover
    ================================ */
 .lp-brand{
-  position: relative;
-  overflow: hidden;
-  background-color:#002755;
-  background-image: var(--brand-bg);
-  background-repeat: no-repeat;
-  /* foco à esquerda + ajuste fino */
-  background-position: left calc(var(--brand-shift-x)) center;
+  display:none;
+  position:relative;
+  overflow:hidden;
+  width:50%;
+  background-color:#002755; /* base */
 }
 
-@media (min-width:1024px){
-  .lp-brand{ display:block; flex: 0 0 58%; }
-  .lp-form-side{ flex: 0 0 42%; }
+/* pinta a imagem num pseudo-elemento que “sangra” para fora */
+.lp-brand::before{
+  content:"";
+  position:absolute;
+  inset: calc(-1 * var(--bleed-y, 0px))
+         calc(-1 * var(--bleed-x, 0px))
+         calc(-1 * var(--bleed-y, 0px))
+         calc(-1 * var(--bleed-x, 0px));
+  background-image: var(--brand-bg);
+  background-repeat:no-repeat;
+  background-size: cover;          /* preenche de ponta a ponta */
+  background-position: left center; /* foco à esquerda */
 }
+
+/* mostra a coluna esquerda no desktop e reduz a direita */
+@media (min-width:1024px){
+  .lp-brand{ display:block; flex:0 0 62%; }  /* esquerda maior */
+  .lp-form-side{ flex:0 0 38%; }            /* direita menor */
+}
+/* ajuste fino para telas largas */
 @media (min-width:1440px){
-  .lp-brand{ flex-basis: 62%; }
-  .lp-form-side{ flex-basis: 38%; }
+  .lp-brand{ flex-basis:64%; }
+  .lp-form-side{ flex-basis:36%; }
 }
 @media (min-width:1920px){
-  .lp-brand{ flex-basis: 66%; }
+  .lp-brand{ flex-basis:66%; }
+  .lp-form-side{ flex-basis:34%; }
+}  .lp-brand{ flex-basis: 66%; }
   .lp-form-side{ flex-basis: 34%; }
 }
 
@@ -184,3 +200,4 @@ body { margin: 0; }
     background-size: auto var(--brand-zoom); /* ex.: auto 100% */
   }
 }
+
