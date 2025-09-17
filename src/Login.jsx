@@ -99,14 +99,13 @@ export default function LoginPage() {
 <div
   className="lp-brand"
   style={{
-    ["--brand-bg"]: `url(${bkg})`,
-    ["--brand-shift-x"]: "-140px",   // puxa p/ a esquerda
-    ["--brand-zoom"]: "100%"         // 100% = menos zoom (mostra mais da imagem)
+    "--brand-bg": `url(${bkg})`,
+    "--bleed-x": "120px", // sangria horizontal p/ esconder bordas do PNG
+    "--bleed-y": "80px",  // sangria vertical
   }}
 >
-  <div className="lp-brand-inner lp-center"></div>
+  <div className="lp-brand-inner lp-center" />
 </div>
-
 
       <div className="lp-form-side">
         <div className="lp-form-wrap">
@@ -198,6 +197,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 
