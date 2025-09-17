@@ -95,7 +95,6 @@ export default function LoginPage() {
 
   return (
     <div className="lp-shell">
-      {/* Lado esquerdo - branding (fundo sólido #002755 + logo + PNG transparente) */}
 <div
   className="lp-brand"
   style={{
@@ -198,6 +197,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 
