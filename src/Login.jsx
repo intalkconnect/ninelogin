@@ -144,14 +144,6 @@ export default function LoginPage() {
       <div className="lp-form-side">
         <div className="lp-form-wrap">
           <div className="lp-form-content">
-            <div className="lp-form-head">
-              <div className="lp-form-logo-mobile">
-                <img src={logo} alt="NineChat" />
-              </div>
-              <h2>Acesse sua conta</h2>
-              <p>Entre com suas credenciais corporativas</p>
-            </div>
-
             <form className="lp-card" onSubmit={handleSubmit} noValidate>
               <div className="lp-field">
                 <label htmlFor="email">Endereço de email</label>
@@ -232,3 +224,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
