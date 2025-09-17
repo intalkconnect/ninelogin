@@ -95,17 +95,18 @@ export default function LoginPage() {
 
   return (
     <div className="lp-shell">
+{/* Lado esquerdo - branding */}
 <div
   className="lp-brand"
   style={{
-    "--brand-bg": `url(${bkg})`,
-    "--brand-shift-x": "-140px",  // mais à esquerda
-    "--brand-zoom": "100%"        // “zoom out” (mostra mais da imagem)
+    ["--brand-bg"]: `url(${bkg})`,
+    ["--brand-shift-x"]: "-140px",   // puxa p/ a esquerda
+    ["--brand-zoom"]: "100%"         // 100% = menos zoom (mostra mais da imagem)
   }}
-/>
-
-  <div className="lp-brand-inner lp-center" />
+>
+  <div className="lp-brand-inner lp-center"></div>
 </div>
+
 
       <div className="lp-form-side">
         <div className="lp-form-wrap">
@@ -197,6 +198,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 
