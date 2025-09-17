@@ -91,11 +91,18 @@ export default function LoginPage() {
 
   return (
     <div className="lp-shell">
-      {/* Lado esquerdo - branding (fundo #003e6a + logo centralizada + imagem centralizada) */}
+      {/* Lado esquerdo - branding (fundo #003e6a + logo + PNG transparente) */}
       <div className="lp-brand">
         <div className="lp-brand-inner lp-center">
           <img src="/logo-front.png" alt="NineChat" className="lp-brand-logo" />
-          <div className="lp-brand-figure" role="img" aria-label="Ilustração do portal" />
+          {/* 🔽 imagem agora vem do JSX (coloque /public/bkg-portal.png) */}
+          <img
+            src="/bkg-portal.png"
+            alt="Ilustração do portal com canais omnichannel"
+            className="lp-figure-img"
+            loading="eager"
+            decoding="async"
+          />
         </div>
       </div>
 
@@ -190,5 +197,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-
