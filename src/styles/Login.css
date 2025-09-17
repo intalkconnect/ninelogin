@@ -19,7 +19,6 @@ body { margin: 0; }
 }
 @media (min-width: 1024px){ html, body { overflow: hidden; } }
 
-/* LEFT (agora fundo #003e6a e sem nuvem) */
 /* LEFT (fundo #003e6a com leve gradiente) */
 .lp-brand{
   display:none;
@@ -32,60 +31,40 @@ body { margin: 0; }
 }
 @media (min-width:1024px){ .lp-brand{ display:block; } }
 
-/* overlay sutil para dar profundidade e ajudar a “fundir” */
+/* overlay sutil para “fundir” */
 .lp-brand::after{
   content:'';
   position:absolute; inset:0;
   pointer-events:none;
-  background: #002755;
+  background:#002755;
 }
 
 .lp-brand-inner{
   position:relative; z-index:1;
   min-height:100%;
-  padding: 40px 64px;
-  color: #e5e7eb;
+  padding:40px 64px;
+  color:#e5e7eb;
   display:flex; flex-direction:column;
 }
+.lp-center{ align-items:center; justify-content:center; text-align:center; gap:24px; }
 
-.lp-center{ align-items:center; justify-content:center; text-align:center; gap: 24px; }
-
-/* Logo centralizada acima */
+/* Logo centralizada */
 .lp-brand-logo{
-  width: 200px; height:auto;
+  width:200px; height:auto;
   filter: drop-shadow(0 10px 24px rgba(0,0,0,.25));
 }
 
-/* FIGURA DO LADO ESQUERDO: usa PNG transparente, sem máscara/blend */
-.lp-brand-figure{
-  position: relative;
-  width: min(820px, 90%);
-  aspect-ratio: 16 / 9;              /* mantém proporção confortável */
-  box-shadow: none;                   /* sem cartão */
-}
-
-.lp-brand-figure::before{
-  content:'';
-  position:absolute; inset:0;
-  background: url('/bkg-portal.png') center / contain no-repeat; /* PNG com alpha */
-  opacity: 1;
-  /* um “colante” suave no fundo, opcional */
+/* IMAGEM VINDO DO JSX (PNG transparente) */
+.lp-figure-img{
+  display:block;
+  width:min(820px, 90%);
+  height:auto;
   filter: drop-shadow(0 20px 40px rgba(0,0,0,.22));
 }
 
-/* Remova/COMENTE quaisquer máscaras antigas */
- /* -webkit-mask-image: ...   <-- REMOVER
-    mask-image: ...          <-- REMOVER
-    mix-blend-mode: screen;  <-- REMOVER */
-
-
-/* (opcional) em navegadores que não suportam mix-blend-mode, ainda fica bom
-   graças à máscara; se quiser, remova a linha acima sem prejuízo */
-
-
 /* RIGHT */
 .lp-form-side{ flex:1; display:flex; align-items:center; justify-content:center; padding:24px; }
-@media (min-width:1024px){ .lp-form-side{ padding: 24px 48px; } }
+@media (min-width:1024px){ .lp-form-side{ padding:24px 48px; } }
 
 .lp-form-wrap{ width:100%; max-width:560px; }
 .lp-form-head{ text-align:center; margin-bottom:28px; }
@@ -93,15 +72,15 @@ body { margin: 0; }
 .lp-form-head p{ color:var(--muted); margin:0; }
 
 .lp-form-logo-mobile{
-  width:48px;height:48px;border-radius:10px;margin:0 auto 16px;
-  display:flex;align-items:center;justify-content:center;background: var(--blue);
+  width:48px; height:48px; border-radius:10px; margin:0 auto 16px;
+  display:flex; align-items:center; justify-content:center; background:var(--blue);
 }
 .lp-form-logo-mobile img{ width:26px; height:26px; display:block; }
 
 .lp-card{
   background:#fff; border:1px solid var(--border);
   border-radius:12px; padding:28px;
-  box-shadow: 0 8px 30px rgba(2,6,23,.06);
+  box-shadow:0 8px 30px rgba(2,6,23,.06);
 }
 
 .lp-field{ margin-bottom:18px; }
@@ -112,7 +91,7 @@ body { margin: 0; }
   width:100%; padding:12px 44px 12px 14px;
   border:1px solid #cbd5e1; border-radius:8px;
   font-size:14px; color:#0f172a; outline:none;
-  transition: border-color .15s ease, box-shadow .15s ease;
+  transition:border-color .15s ease, box-shadow .15s ease;
 }
 .lp-input-wrap input:focus{ border-color:#2563eb; box-shadow:0 0 0 3px rgba(37,99,235,.15); }
 .lp-input-wrap.has-error input{ border-color:#fca5a5; box-shadow:0 0 0 3px rgba(239,68,68,.12); }
@@ -162,6 +141,3 @@ body { margin: 0; }
 .lp-footrow{ display:flex; justify-content:center; gap:18px; color:#64748b; font-size:12px; }
 .lp-link-plain{ color:#64748b; text-decoration:none; }
 .lp-link-plain:hover{ color:#334155; }
-
-
-
