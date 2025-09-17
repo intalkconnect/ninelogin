@@ -42,7 +42,7 @@ body { margin: 0; }
   background-color:#002755;
 }
 
-/* pinta a imagem num pseudo-elemento que "sangra" para fora */
+/* pinta a imagem num pseudo-elemento com melhor controle responsivo */
 .lp-brand::before{
   content:"";
   position:absolute;
@@ -56,20 +56,60 @@ body { margin: 0; }
   background-position: center center;
 }
 
+/* Ajustes específicos para diferentes tamanhos de tela */
+@media (min-width: 1024px) and (max-width: 1280px) {
+  .lp-brand::before {
+    background-position: center left;
+  }
+}
+
+@media (min-width: 1280px) and (max-width: 1440px) {
+  .lp-brand::before {
+    background-position: 40% center;
+  }
+}
+
+@media (min-width: 1440px) and (max-width: 1920px) {
+  .lp-brand::before {
+    background-position: 45% center;
+  }
+}
+
+@media (min-width: 1920px) {
+  .lp-brand::before {
+    background-position: center center;
+  }
+}
+
+/* Para telas muito altas, ajusta o tamanho */
+@media (min-height: 900px) and (min-width: 1024px) {
+  .lp-brand::before {
+    background-size: cover;
+    background-position: center center;
+  }
+}
+
+/* Para telas ultra-wide */
+@media (min-aspect-ratio: 21/9) and (min-width: 1024px) {
+  .lp-brand::before {
+    background-size: auto 100%;
+    background-position: center center;
+  }
+}
 
 /* mostra a coluna esquerda no desktop e reduz a direita */
 @media (min-width:1024px){
-  .lp-brand{ display:block; flex:0 0 62%; }
-  .lp-form-side{ flex:0 0 38%; }
+  .lp-brand{ display:block; flex:0 0 60%; }
+  .lp-form-side{ flex:0 0 40%; }
 }
 /* ajuste fino para telas largas */
 @media (min-width:1440px){
-  .lp-brand{ flex-basis:64%; }
-  .lp-form-side{ flex-basis:36%; }
+  .lp-brand{ flex-basis:62%; }
+  .lp-form-side{ flex-basis:38%; }
 }
 @media (min-width:1920px){
-  .lp-brand{ flex-basis:66%; }
-  .lp-form-side{ flex-basis:34%; }
+  .lp-brand{ flex-basis:64%; }
+  .lp-form-side{ flex-basis:36%; }
 }
 
 /* sem overlay/gradiente */
@@ -201,3 +241,38 @@ body { margin: 0; }
 .lp-footrow{ display:flex; justify-content:center; gap:18px; color:#64748b; font-size:12px; }
 .lp-link-plain{ color:#64748b; text-decoration:none; }
 .lp-link-plain:hover{ color:#334155; }
+
+/* Ajuste adicional para telas pequenas de laptop (768px - 1024px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .lp-shell {
+    flex-direction: column;
+  }
+  
+  .lp-brand {
+    display: block;
+    width: 100%;
+    height: 40vh;
+    min-height: 300px;
+  }
+  
+  .lp-brand::before {
+    background-position: center center;
+    background-size: cover;
+  }
+  
+  .lp-form-side {
+    flex: 1;
+    min-height: 60vh;
+  }
+}
+
+/* Splash screen responsiva */
+.lp-splash{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 100vh;
+  color: var(--muted);
+  font-size: 16px;
+}
