@@ -97,7 +97,7 @@ export default function LoginPage() {
           <img src="/logo-front.png" alt="NineChat" className="lp-brand-logo" />
           {/* 🔽 imagem agora vem do JSX (coloque /public/bkg-portal.png) */}
           <img
-            src="/bkg-portal.png"
+            src="/bkg.png"
             alt="Ilustração do portal com canais omnichannel"
             className="lp-figure-img"
             loading="eager"
@@ -197,3 +197,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
