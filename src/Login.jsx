@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import './styles/Login.css';
-import bkg from './assets/bkg.png'; // <- sua arte (PNG com transparência)
+import bkg from './assets/bkg.png';
 import logo from './assets/ninechat_logo_icons.png';
 
 /* =========== BASE DO BACKEND =========== */
@@ -31,17 +31,16 @@ export default function LoginPage() {
 
   // Redireciona usando a URL enviada pelo servidor e preserva ?redirect= local
   const doRedirect = (serverUrl) => {
-    let target = serverUrl;
+    let target = serverUrl || '/'; // fallback seguro (seu portal não tem /login)
 
-    // Se a /login recebeu ?redirect=/rota/interna, anexamos à URL destino
-    const next = new URLSearchParams(window.location.search).get('redirect');
-    if (next) {
-      const u = new URL(target, window.location.href); // se target for absoluto, o base é ignorado
-      u.searchParams.set('redirect', next);
-      target = u.toString();
+    try {
+      const u = new URL(target, window.location.href); // aceita absoluto ou relativo
+      const next = new URLSearchParams(window.location.search).get('redirect');
+      if (next) u.searchParams.set('redirect', next);
+      window.location.replace(u.toString()); // evita voltar para /login
+    } catch {
+      window.location.replace('/'); // último fallback
     }
-
-    window.location.replace(target); // evita voltar para /login no histórico
   };
 
   useEffect(() => {
@@ -49,22 +48,23 @@ export default function LoginPage() {
     if (savedEmail) { setEmail(savedEmail); setRememberMe(true); }
 
     (async () => {
-      // 1) Checa se já está autenticado
+      // 1) Checa se já está autenticado (modo "silencioso")
       try {
-    const who = await fetch(apiUrl('/api/whoami?soft=1'), { credentials: 'include' });
+        const who = await fetch(apiUrl('/api/whoami?soft=1'), { credentials: 'include' });
         if (who.ok) {
           const data = await parseResponse(who);
-          return doRedirect(data?.redirectUrl);
+          if (data?.authenticated) {
+            return doRedirect(data?.redirectUrl);
+          }
+          // se não autenticado, segue para obter CSRF
         }
       } catch {
         // ignora e segue fluxo para obter CSRF
       }
 
-      // 2) Se não está autenticado, busca CSRF e exibe o form
+      // 2) Não autenticado → busca CSRF e exibe o form
       try {
-        const res = await fetch(apiUrl('/api/csrf-token'), {
-          credentials: 'include',
-        });
+        const res = await fetch(apiUrl('/api/csrf-token'), { credentials: 'include' });
         const data = await parseResponse(res);
         if (!res.ok || !data?.token) throw new Error('CSRF inválido');
         setCsrfToken(data.token);
@@ -137,10 +137,7 @@ export default function LoginPage() {
   return (
     <div className="lp-shell">
       {/* Lado esquerdo - branding */}
-      <div
-        className="lp-brand"
-        style={{ "--brand-bg": `url(${bkg})` }}
-      >
+      <div className="lp-brand" style={{ "--brand-bg": `url(${bkg})` }}>
         <div className="lp-brand-inner lp-center" />
       </div>
 
@@ -235,5 +232,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-
