@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import './styles/Login.css';
-import bkg from './assets/bkg.png'; // <- sua arte (PNG com transparência)
+import bkg from '"@/assets/bkg.png'; // <- sua arte (PNG com transparência)
+
 
 /* =========== BASE DO BACKEND =========== */
 const RAW_BACKEND = (import.meta.env?.VITE_APP_LOGIN_BACKEND_URL || '').trim();
@@ -95,19 +96,9 @@ export default function LoginPage() {
   return (
     <div className="lp-shell">
       {/* Lado esquerdo - branding (fundo sólido #002755 + logo + PNG transparente) */}
-      <div className="lp-brand">
-        <div className="lp-brand-inner lp-center">
-          <img src="/logo-front.png" alt="NineChat" className="lp-brand-logo" />
-          <img
-            src={bkg}
-            alt="Ilustração com canais omnichannel"
-            className="lp-figure-img"
-            loading="eager"
-            decoding="async"
-            draggable="false"
-          />
-        </div>
-      </div>
+<div className="lp-brand" style={{ "--brand-bg": `url(${bg})` }}>
+  <div className="lp-brand-inner lp-center">{/* pode ficar vazio */}</div>
+</div>
 
       {/* Lado direito - formulário */}
       <div className="lp-form-side">
@@ -200,3 +191,4 @@ export default function LoginPage() {
     </div>
   );
 }
+
