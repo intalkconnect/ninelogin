@@ -29,10 +29,19 @@ export default function LoginPage() {
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [serverError, setServerError] = useState('');
 
-  const doRedirect = (fallbackUrl) => {
-    const urlParam = new URLSearchParams(window.location.search).get('redirect');
-    const target = urlParam || fallbackUrl || '/app';
-    window.location.replace(target); // evita voltar para /login
+  // Redireciona usando a URL enviada pelo servidor e preserva ?redirect= local
+  const doRedirect = (serverUrl) => {
+    let target = serverUrl || '/app';
+
+    // Se a /login recebeu ?redirect=/rota/interna, anexamos à URL destino
+    const next = new URLSearchParams(window.location.search).get('redirect');
+    if (next) {
+      const u = new URL(target, window.location.href); // se target for absoluto, o base é ignorado
+      u.searchParams.set('redirect', next);
+      target = u.toString();
+    }
+
+    window.location.replace(target); // evita voltar para /login no histórico
   };
 
   useEffect(() => {
@@ -43,7 +52,7 @@ export default function LoginPage() {
       // 1) Checa se já está autenticado
       try {
         const who = await fetch(apiUrl('/api/whoami'), {
-          credentials: 'include'
+          credentials: 'include',
         });
         if (who.ok) {
           const data = await parseResponse(who);
@@ -56,7 +65,7 @@ export default function LoginPage() {
       // 2) Se não está autenticado, busca CSRF e exibe o form
       try {
         const res = await fetch(apiUrl('/api/csrf-token'), {
-          credentials: 'include'
+          credentials: 'include',
         });
         const data = await parseResponse(res);
         if (!res.ok || !data?.token) throw new Error('CSRF inválido');
@@ -228,4 +237,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
