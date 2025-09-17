@@ -39,27 +39,27 @@ body { margin: 0; }
   position:relative;
   overflow:hidden;
   width:50%;
-  background-color:#002755; /* base */
+  background-color:#002755;
 }
 
 /* pinta a imagem num pseudo-elemento que “sangra” para fora */
 .lp-brand::before{
   content:"";
   position:absolute;
-  inset: calc(-1 * var(--bleed-y, 0px))
-         calc(-1 * var(--bleed-x, 0px))
-         calc(-1 * var(--bleed-y, 0px))
-         calc(-1 * var(--bleed-x, 0px));
+  top:0;
+  bottom:0;
+  left:  calc(-1 * var(--bleed-x, 0));
+  right: calc(-1 * var(--bleed-x, 0));
   background-image: var(--brand-bg);
   background-repeat:no-repeat;
-  background-size: cover;          /* preenche de ponta a ponta */
-  background-position: left center; /* foco à esquerda */
-}
+  background-size: cover;
+  background-position: left center;
+
 
 /* mostra a coluna esquerda no desktop e reduz a direita */
 @media (min-width:1024px){
-  .lp-brand{ display:block; flex:0 0 62%; }  /* esquerda maior */
-  .lp-form-side{ flex:0 0 38%; }            /* direita menor */
+  .lp-brand{ display:block; flex:0 0 62%; }
+  .lp-form-side{ flex:0 0 38%; }
 }
 /* ajuste fino para telas largas */
 @media (min-width:1440px){
@@ -71,7 +71,6 @@ body { margin: 0; }
   .lp-form-side{ flex-basis:34%; }
 }  .lp-brand{ flex-basis: 66%; }
   .lp-form-side{ flex-basis: 34%; }
-}
 
 /* sem overlay/gradiente */
 .lp-brand::after{ content: none; }
@@ -200,4 +199,5 @@ body { margin: 0; }
     background-size: auto var(--brand-zoom); /* ex.: auto 100% */
   }
 }
+
 
