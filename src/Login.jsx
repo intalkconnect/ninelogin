@@ -94,7 +94,7 @@ export default function LoginPage() {
       {/* Lado esquerdo - branding (fundo #003e6a + logo centralizada + imagem centralizada) */}
       <div className="lp-brand">
         <div className="lp-brand-inner lp-center">
-          <img src="/bkg-portal.png" alt="NineChat" className="lp-brand-logo" />
+          <img src="/logo-front.png" alt="NineChat" className="lp-brand-logo" />
           <div className="lp-brand-figure" role="img" aria-label="Ilustração do portal" />
         </div>
       </div>
@@ -190,4 +190,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
