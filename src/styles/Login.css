@@ -54,6 +54,7 @@ body { margin: 0; }
   background-repeat:no-repeat;
   background-size: cover;
   background-position: left center;
+}
 
 
 /* mostra a coluna esquerda no desktop e reduz a direita */
@@ -199,5 +200,3 @@ body { margin: 0; }
     background-size: auto var(--brand-zoom); /* ex.: auto 100% */
   }
 }
-
-
