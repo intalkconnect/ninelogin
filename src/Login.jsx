@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import './styles/Login.css';
-import bkg from './assets/bkg.png';
+import bkg from './assets/bkg.png'; // <- sua arte (PNG com transparência)
 
 /* =========== BASE DO BACKEND =========== */
 const RAW_BACKEND = (import.meta.env?.VITE_APP_LOGIN_BACKEND_URL || '').trim();
@@ -74,7 +74,9 @@ export default function LoginPage() {
 
       const data = await parseResponse(res);
       if (!res.ok) {
-        const msg = (data && (data.message || data.error)) || (typeof data?._raw === 'string' ? data._raw : 'Falha no login');
+        const msg =
+          (data && (data.message || data.error)) ||
+          (typeof data?._raw === 'string' ? data._raw : 'Falha no login');
         throw new Error(msg);
       }
 
@@ -92,17 +94,17 @@ export default function LoginPage() {
 
   return (
     <div className="lp-shell">
-      {/* Lado esquerdo - branding (fundo #003e6a + logo + PNG transparente) */}
+      {/* Lado esquerdo - branding (fundo sólido #002755 + logo + PNG transparente) */}
       <div className="lp-brand">
         <div className="lp-brand-inner lp-center">
           <img src="/logo-front.png" alt="NineChat" className="lp-brand-logo" />
-          {/* 🔽 imagem agora vem do JSX (coloque /public/bkg-portal.png) */}
           <img
             src={bkg}
-            alt="Ilustração do portal com canais omnichannel"
+            alt="Ilustração com canais omnichannel"
             className="lp-figure-img"
             loading="eager"
             decoding="async"
+            draggable="false"
           />
         </div>
       </div>
@@ -198,5 +200,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-
