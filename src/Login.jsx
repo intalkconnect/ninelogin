@@ -99,8 +99,7 @@ export default function LoginPage() {
 <div
   className="lp-brand"
   style={{
-    "--brand-bg": `url(${bkg})`,
-    "--bleed-x": "120px", // sangria horizontal p/ esconder bordas do PNG
+    "--brand-bg": `url(${bkg})`
   }}
 >
   <div className="lp-brand-inner lp-center" />
@@ -195,6 +194,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 
