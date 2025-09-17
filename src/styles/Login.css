@@ -42,18 +42,18 @@ body { margin: 0; }
   background-color:#002755;
 }
 
-/* pinta a imagem num pseudo-elemento que “sangra” para fora */
+/* pinta a imagem num pseudo-elemento que "sangra" para fora */
 .lp-brand::before{
   content:"";
   position:absolute;
   top:0;
   bottom:0;
-  left:  calc(-1 * var(--bleed-x, 0));
-  right: calc(-1 * var(--bleed-x, 0));
+  left:0;
+  right:0;
   background-image: var(--brand-bg);
   background-repeat:no-repeat;
   background-size: cover;
-  background-position: left center;
+  background-position: center center;
 }
 
 
@@ -70,8 +70,7 @@ body { margin: 0; }
 @media (min-width:1920px){
   .lp-brand{ flex-basis:66%; }
   .lp-form-side{ flex-basis:34%; }
-}  .lp-brand{ flex-basis: 66%; }
-  .lp-form-side{ flex-basis: 34%; }
+}
 
 /* sem overlay/gradiente */
 .lp-brand::after{ content: none; }
@@ -186,17 +185,3 @@ body { margin: 0; }
 .lp-footrow{ display:flex; justify-content:center; gap:18px; color:#64748b; font-size:12px; }
 .lp-link-plain{ color:#64748b; text-decoration:none; }
 .lp-link-plain:hover{ color:#334155; }
-
-/* Painel mais “largo” que alto (desktop comum): usar largura como referência */
-@media (min-aspect-ratio: 1/1){
-  .lp-brand{
-    background-size: var(--brand-zoom) auto; /* ex.: 100% auto (menos zoom) */
-  }
-}
-
-/* Painel mais alto que largo: usar altura como referência */
-@media (max-aspect-ratio: 1/1){
-  .lp-brand{
-    background-size: auto var(--brand-zoom); /* ex.: auto 100% */
-  }
-}
