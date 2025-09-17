@@ -31,7 +31,7 @@ export default function LoginPage() {
 
   // Redireciona usando a URL enviada pelo servidor e preserva ?redirect= local
   const doRedirect = (serverUrl) => {
-    let target = serverUrl || '/app';
+    let target = serverUrl;
 
     // Se a /login recebeu ?redirect=/rota/interna, anexamos à URL destino
     const next = new URLSearchParams(window.location.search).get('redirect');
@@ -235,4 +235,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
