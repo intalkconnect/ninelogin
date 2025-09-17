@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import './styles/Login.css';
 import bkg from './assets/bkg.png'; // <- sua arte (PNG com transparência)
-
+import logo from './assets/ninechat_logo_icons.png';
 
 /* =========== BASE DO BACKEND =========== */
 const RAW_BACKEND = (import.meta.env?.VITE_APP_LOGIN_BACKEND_URL || '').trim();
@@ -110,7 +110,7 @@ export default function LoginPage() {
         <div className="lp-form-wrap">
           <div className="lp-form-head">
             <div className="lp-form-logo-mobile">
-              <img src="/logo-front.png" alt="NineChat" />
+              <img src={logo} alt="NineChat" />
             </div>
             <h2>Acesse sua conta</h2>
             <p>Entre com suas credenciais corporativas</p>
@@ -184,7 +184,6 @@ export default function LoginPage() {
           </form>
 
           <div className="lp-footlinks">
-            <p>Não possui acesso? <a href="#" className="lp-link-plain">Solicitar credenciais</a></p>
             <div className="lp-footrow">
               <a href="#" className="lp-link-plain">Política de Privacidade</a>
               <a href="#" className="lp-link-plain">Termos de Uso</a>
@@ -196,6 +195,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 
