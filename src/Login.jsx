@@ -213,9 +213,8 @@ export default function LoginPage() {
 
             <div className="lp-footlinks">
               <div className="lp-footrow">
-                <a href="#" className="lp-link-plain">Política de Privacidade</a>
-                <a href="#" className="lp-link-plain">Termos de Uso</a>
-                <a href="#" className="lp-link-plain">Suporte</a>
+                <a href="/legal/privacy" className="lp-link-plain" target="_blank" rel="noopener noreferrer">Política de Privacidade</a>
+                <a href="/legal/terms" className="lp-link-plain" target="_blank" rel="noopener noreferrer">Termos de Uso</a>
               </div>
             </div>
           </div>
@@ -224,4 +223,5 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
