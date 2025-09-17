@@ -58,30 +58,28 @@ body { margin: 0; }
   filter: drop-shadow(0 10px 24px rgba(0,0,0,.25));
 }
 
-/* ====== FIGURA CENTRAL “FUNDIDA” ======
-   usa a imagem do public/bkg-portal.png
-   e aplica máscara radial para sumir bordas */
+/* FIGURA DO LADO ESQUERDO: usa PNG transparente, sem máscara/blend */
 .lp-brand-figure{
   position: relative;
   width: min(820px, 90%);
-  aspect-ratio: 16 / 9;
-  /* sem sombras/caixas para não parecer card */
-  box-shadow: none;
-  filter: saturate(1.04) brightness(1.02);
+  aspect-ratio: 16 / 9;              /* mantém proporção confortável */
+  box-shadow: none;                   /* sem cartão */
 }
 
-/* a imagem vai no ::before para aplicar mask com mais controle */
 .lp-brand-figure::before{
   content:'';
   position:absolute; inset:0;
-  background: url('/bkg-portal.png') center / contain no-repeat;
-  /* bordas suavizadas que “somem” no fundo */
-  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 68%, rgba(0,0,0,0) 95%);
-          mask-image: radial-gradient(ellipse at 50% 50%, #000 68%, rgba(0,0,0,0) 95%);
-  /* ajuste fino de opacidade/blend para mesclar */
-  opacity: .98;
-  mix-blend-mode: screen; /* funciona muito bem com fundo escuro */
+  background: url('/bkg-portal.png') center / contain no-repeat; /* PNG com alpha */
+  opacity: 1;
+  /* um “colante” suave no fundo, opcional */
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,.22));
 }
+
+/* Remova/COMENTE quaisquer máscaras antigas */
+ /* -webkit-mask-image: ...   <-- REMOVER
+    mask-image: ...          <-- REMOVER
+    mix-blend-mode: screen;  <-- REMOVER */
+
 
 /* (opcional) em navegadores que não suportam mix-blend-mode, ainda fica bom
    graças à máscara; se quiser, remova a linha acima sem prejuízo */
@@ -166,4 +164,5 @@ body { margin: 0; }
 .lp-footrow{ display:flex; justify-content:center; gap:18px; color:#64748b; font-size:12px; }
 .lp-link-plain{ color:#64748b; text-decoration:none; }
 .lp-link-plain:hover{ color:#334155; }
+
 
