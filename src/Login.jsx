@@ -98,8 +98,13 @@ export default function LoginPage() {
       {/* Lado esquerdo - branding (fundo sólido #002755 + logo + PNG transparente) */}
 <div
   className="lp-brand"
-  style={{ "--brand-bg": `url(${bkg})`, "--brand-shift-x": "-140px" }} // ajuste aqui (-/+) 
->
+  style={{
+    "--brand-bg": `url(${bkg})`,
+    "--brand-shift-x": "-140px",  // mais à esquerda
+    "--brand-zoom": "100%"        // “zoom out” (mostra mais da imagem)
+  }}
+/>
+
   <div className="lp-brand-inner lp-center" />
 </div>
 
@@ -195,6 +200,7 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
 
