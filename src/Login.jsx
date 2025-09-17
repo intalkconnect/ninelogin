@@ -24,23 +24,50 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [csrfToken, setCsrfToken] = useState('');
 
+  const [booting, setBooting] = useState(true); // checando sessão antes de exibir o form
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '' });
   const [serverError, setServerError] = useState('');
+
+  const doRedirect = (fallbackUrl) => {
+    const urlParam = new URLSearchParams(window.location.search).get('redirect');
+    const target = urlParam || fallbackUrl || '/app';
+    window.location.replace(target); // evita voltar para /login
+  };
 
   useEffect(() => {
     const savedEmail = localStorage.getItem('rememberedEmail');
     if (savedEmail) { setEmail(savedEmail); setRememberMe(true); }
 
     (async () => {
+      // 1) Checa se já está autenticado
       try {
-        const res = await fetch(apiUrl('/api/csrf-token'), { credentials: 'include' });
+        const who = await fetch(apiUrl('/api/whoami'), {
+          credentials: 'include',
+          headers: { 'Cache-Control': 'no-store' },
+        });
+        if (who.ok) {
+          const data = await parseResponse(who);
+          return doRedirect(data?.redirectUrl);
+        }
+      } catch {
+        // ignora e segue fluxo para obter CSRF
+      }
+
+      // 2) Se não está autenticado, busca CSRF e exibe o form
+      try {
+        const res = await fetch(apiUrl('/api/csrf-token'), {
+          credentials: 'include',
+          headers: { 'Cache-Control': 'no-store' },
+        });
         const data = await parseResponse(res);
         if (!res.ok || !data?.token) throw new Error('CSRF inválido');
         setCsrfToken(data.token);
       } catch (err) {
         console.error('CSRF Error:', err);
         setServerError('Falha na configuração de segurança');
+      } finally {
+        setBooting(false);
       }
     })();
   }, []);
@@ -84,8 +111,8 @@ export default function LoginPage() {
       if (rememberMe) localStorage.setItem('rememberedEmail', email);
       else localStorage.removeItem('rememberedEmail');
 
-      if (data?.redirectUrl) window.location.href = data.redirectUrl;
-      else setServerError('URL de redirecionamento não recebida');
+      // Redireciona pós-login (preserva ?redirect= se existir)
+      doRedirect(data?.redirectUrl);
     } catch (err) {
       setServerError(err?.message || 'Erro ao fazer login');
     } finally {
@@ -93,106 +120,113 @@ export default function LoginPage() {
     }
   };
 
+  // Splash enquanto verifica sessão/CSRF
+  if (booting) {
+    return (
+      <div className="lp-splash">
+        <span className="lp-spinner" /> Carregando...
+      </div>
+    );
+  }
+
   return (
     <div className="lp-shell">
-{/* Lado esquerdo - branding */}
-<div
-  className="lp-brand"
-  style={{
-    "--brand-bg": `url(${bkg})`
-  }}
->
-  <div className="lp-brand-inner lp-center" />
-</div>
+      {/* Lado esquerdo - branding */}
+      <div
+        className="lp-brand"
+        style={{ "--brand-bg": `url(${bkg})` }}
+      >
+        <div className="lp-brand-inner lp-center" />
+      </div>
 
       <div className="lp-form-side">
         <div className="lp-form-wrap">
           <div className="lp-form-content">
-          <div className="lp-form-head">
-            <div className="lp-form-logo-mobile">
-              <img src={logo} alt="NineChat" />
-            </div>
-            <h2>Acesse sua conta</h2>
-            <p>Entre com suas credenciais corporativas</p>
-          </div>
-
-          <form className="lp-card" onSubmit={handleSubmit} noValidate>
-            <div className="lp-field">
-              <label htmlFor="email">Endereço de email</label>
-              <div className={`lp-input-wrap ${errors.email ? 'has-error' : ''}`}>
-                <input
-                  id="email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => { setEmail(e.target.value); if (errors.email) setErrors(s => ({ ...s, email: '' })); }}
-                  placeholder="usuario@empresa.com"
-                  disabled={isLoading}
-                />
-                <span className="lp-input-icon"><Mail size={20} aria-hidden /></span>
+            <div className="lp-form-head">
+              <div className="lp-form-logo-mobile">
+                <img src={logo} alt="NineChat" />
               </div>
-              {errors.email && <p className="lp-error">{errors.email}</p>}
+              <h2>Acesse sua conta</h2>
+              <p>Entre com suas credenciais corporativas</p>
             </div>
 
-            <div className="lp-field">
-              <label htmlFor="password">Senha</label>
-              <div className={`lp-input-wrap ${errors.password ? 'has-error' : ''}`}>
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={password}
-                  onChange={(e) => { setPassword(e.target.value); if (errors.password) setErrors(s => ({ ...s, password: '' })); }}
-                  placeholder="Digite sua senha"
-                  disabled={isLoading}
-                />
-                <button
-                  type="button"
-                  className="lp-eye"
-                  onClick={() => setShowPassword(v => !v)}
-                  aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
-                >
-                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            <form className="lp-card" onSubmit={handleSubmit} noValidate>
+              <div className="lp-field">
+                <label htmlFor="email">Endereço de email</label>
+                <div className={`lp-input-wrap ${errors.email ? 'has-error' : ''}`}>
+                  <input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value); if (errors.email) setErrors(s => ({ ...s, email: '' })); }}
+                    placeholder="usuario@empresa.com"
+                    disabled={isLoading}
+                  />
+                  <span className="lp-input-icon"><Mail size={20} aria-hidden /></span>
+                </div>
+                {errors.email && <p className="lp-error">{errors.email}</p>}
+              </div>
+
+              <div className="lp-field">
+                <label htmlFor="password">Senha</label>
+                <div className={`lp-input-wrap ${errors.password ? 'has-error' : ''}`}>
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => { setPassword(e.target.value); if (errors.password) setErrors(s => ({ ...s, password: '' })); }}
+                    placeholder="Digite sua senha"
+                    disabled={isLoading}
+                  />
+                  <button
+                    type="button"
+                    className="lp-eye"
+                    onClick={() => setShowPassword(v => !v)}
+                    aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+                  >
+                    {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                  </button>
+                </div>
+                {errors.password && <p className="lp-error">{errors.password}</p>}
+              </div>
+
+              <div className="lp-row">
+                <label className="lp-check">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    disabled={isLoading}
+                  />
+                  <span>Manter conectado</span>
+                </label>
+
+                <button type="button" className="lp-link" disabled={isLoading}>
+                  Esqueceu a senha?
                 </button>
               </div>
-              {errors.password && <p className="lp-error">{errors.password}</p>}
-            </div>
 
-            <div className="lp-row">
-              <label className="lp-check">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  disabled={isLoading}
-                />
-                <span>Manter conectado</span>
-              </label>
+              {serverError && <div className="lp-alert">{serverError}</div>}
 
-              <button type="button" className="lp-link" disabled={isLoading}>
-                Esqueceu a senha?
+              <button type="submit" disabled={isLoading} className="lp-btn">
+                {isLoading ? (<><span className="lp-spinner" /> Autenticando...</>) : 'Entrar'}
               </button>
-            </div>
 
-            {serverError && <div className="lp-alert">{serverError}</div>}
+              <div className="lp-sec">
+                <Shield size={16} aria-hidden /> <span>Conexão protegida por SSL/TLS</span>
+              </div>
+            </form>
 
-            <button type="submit" disabled={isLoading} className="lp-btn">
-              {isLoading ? (<><span className="lp-spinner" /> Autenticando...</>) : 'Entrar'}
-            </button>
-
-            <div className="lp-sec">
-              <Shield size={16} aria-hidden /> <span>Conexão protegida por SSL/TLS</span>
-            </div>
-          </form>
-
-          <div className="lp-footlinks">
-            <div className="lp-footrow">
-              <a href="#" className="lp-link-plain">Política de Privacidade</a>
-              <a href="#" className="lp-link-plain">Termos de Uso</a>
-              <a href="#" className="lp-link-plain">Suporte</a>
+            <div className="lp-footlinks">
+              <div className="lp-footrow">
+                <a href="#" className="lp-link-plain">Política de Privacidade</a>
+                <a href="#" className="lp-link-plain">Termos de Uso</a>
+                <a href="#" className="lp-link-plain">Suporte</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-        </div>
     </div>
   );
 }
