@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Eye, EyeOff, Mail, Shield } from 'lucide-react';
 import './styles/Login.css';
-import bkg from '@/assets/bkg.png'; // <- sua arte (PNG com transparência)
+import bkg from './assets/bkg.png'; // <- sua arte (PNG com transparência)
 
 
 /* =========== BASE DO BACKEND =========== */
@@ -191,5 +191,6 @@ export default function LoginPage() {
     </div>
   );
 }
+
 
 
