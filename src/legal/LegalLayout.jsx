@@ -1,6 +1,6 @@
 import React from "react";
 import { Shield, FileText, ArrowUp } from "lucide-react";
-import styles from "../styles/Legal.module.css";
+import styles from "./styles/Legal.module.css";
 
 export default function LegalLayout({
   icon = <FileText size={18} />,
