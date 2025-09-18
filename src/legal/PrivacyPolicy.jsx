@@ -6,7 +6,7 @@ import styles from "./styles/Legal.module.css";
 /** personalize conforme sua organização */
 const ISSUER = "NineChat";
 const CONTACT_EMAIL = "privacidade@ninechat.com.br";
-const LAST_UPDATED = "17/09/2025";
+const LAST_UPDATED = "17/09/2024";
 
 const toc = [
   { id: "escopo", label: "Escopo e Papéis (LGPD)" },
