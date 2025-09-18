@@ -1,7 +1,7 @@
 import React from "react";
 import LegalLayout from "./LegalLayout";
 import { FileText } from "lucide-react";
-import styles from "../styles/Legal.module.css";
+import styles from "./styles/Legal.module.css";
 
 /** personalize conforme sua marca/contatos */
 const ISSUER = "NineChat";
