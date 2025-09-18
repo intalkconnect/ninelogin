@@ -1,30 +1,28 @@
 import React from "react";
 import LegalLayout from "./LegalLayout";
 import { FileText } from "lucide-react";
-import styles from "./styles/Legal.module.css";
+import styles from "../styles/Legal.module.css";
 
-const ISSUER = "NineChat";
+const ISSUER = "NineChat (Daniel Rodrigo Oliveira do Nascimento, MEI – CNPJ 18.260.296/0001-45)";
 const CONTACT_EMAIL = "legal@ninechat.com.br";
 const LAST_UPDATED = "17/09/2025";
-const JURISDICTION = "leis da República Federativa do Brasil";
-const VENUE = "Comarca de São Paulo/SP";
 
 const toc = [
-  { id: "sec-aceite", label: "Aceitação e Elegibilidade" },
-  { id: "sec-conta", label: "Conta e Credenciais" },
-  { id: "sec-uso", label: "Uso Permitido e Restrições" },
-  { id: "sec-planos", label: "Planos e Cancelamento" },
-  { id: "sec-ip", label: "Propriedade Intelectual" },
-  { id: "sec-confid", label: "Confidencialidade" },
-  { id: "sec-priv", label: "Privacidade e LGPD" },
-  { id: "sec-terceiros", label: "Serviços de Terceiros" },
-  { id: "sec-garantias", label: "Garantias e SLA" },
-  { id: "sec-limite", label: "Limitação de Responsabilidade" },
-  { id: "sec-inden", label: "Indenização" },
-  { id: "sec-susp", label: "Suspensão e Encerramento" },
-  { id: "sec-changes", label: "Alterações" },
-  { id: "sec-lei", label: "Lei Aplicável e Foro" },
-  { id: "sec-contato", label: "Contato" },
+  { id: "def", label: "Definições" },
+  { id: "obj", label: "Objeto do Serviço" },
+  { id: "vig", label: "Vigência e Renovação" },
+  { id: "precos", label: "Preços e Pagamento" },
+  { id: "suporte", label: "Suporte e Serviços" },
+  { id: "obr-contratado", label: "Obrigações do Contratado" },
+  { id: "obr-contratante", label: "Obrigações do Contratante" },
+  { id: "rescisao", label: "Rescisão e Não Renovação" },
+  { id: "ip", label: "Propriedade Intelectual e Licença" },
+  { id: "tecnico", label: "Condições Técnicas e Manutenção" },
+  { id: "limitacao", label: "Limitação de Responsabilidade" },
+  { id: "sla", label: "SLA (Resumo)" },
+  { id: "aup", label: "Política de Uso Aceitável (Resumo)" },
+  { id: "foro", label: "Lei Aplicável e Foro" },
+  { id: "contato", label: "Contato" },
 ];
 
 export default function TermsOfUse() {
@@ -32,61 +30,102 @@ export default function TermsOfUse() {
     <LegalLayout
       icon={<FileText size={18} />}
       title="Termos de Uso"
-      subtitle={`${ISSUER}`}
+      subtitle={ISSUER}
       updatedAt={LAST_UPDATED}
       toc={toc}
     >
       <article className={styles.article}>
-        <h2 id="sec-aceite">Aceitação e Elegibilidade</h2>
-        <p>Ao usar a plataforma <strong>{ISSUER}</strong>, você concorda com estes Termos e declara possuir autoridade e capacidade legal.</p>
-
-        <h2 id="sec-conta">Conta e Credenciais</h2>
+        <h2 id="def">Definições</h2>
         <ul>
-          <li>Você é responsável por suas credenciais e por atividades realizadas na conta.</li>
-          <li>Notifique incidentes de segurança ou acessos não autorizados imediatamente.</li>
+          <li><strong>Canais:</strong> WhatsApp, Telegram, Facebook Messenger, Instagram Direct e outros que venham a ser suportados.</li>
+          <li><strong>Número/Identificador de Canal:</strong> cada identificador (ex.: número WABA, conta Telegram, Página do Facebook, conta Instagram) provisionado e ativo em nome do cliente.</li>
+          <li><strong>Sessão de 24 horas:</strong> janela contínua de 24h, por contato e por canal, contada desde o evento que originar a conversa; mensagens dentro da janela pertencem à mesma sessão, e, após 24h de inatividade, nova mensagem abre nova sessão (no WhatsApp, acompanha a janela da Meta).</li>
+          <li><strong>Painel/Relatórios:</strong> interface que exibe métricas, disponibilidade, incidentes e bilhetagem.</li>
         </ul>
 
-        <h2 id="sec-uso">Uso Permitido e Restrições</h2>
+        <h2 id="obj">Objeto do Serviço</h2>
+        <p>
+          O NineChat integra, centraliza e opera comunicações nos Canais, incluindo painel, APIs, suporte e integrações acordadas por escrito. O software é licenciado, sem cessão de código-fonte ou transferência de titularidade.
+        </p>
+
+        <h2 id="vig">Vigência e Renovação</h2>
+        <p>
+          Vigência inicial de <strong>6 (seis) meses</strong>, com <strong>renovações automáticas de 6 (seis) meses</strong>, salvo notificação de não renovação com antecedência mínima de <strong>45 (quarenta e cinco) dias</strong>.
+        </p>
+
+        <h2 id="precos">Preços e Pagamento</h2>
         <ul>
-          <li>É vedado uso ilícito, spam, violação de direitos, engenharia reversa ou contorno de segurança.</li>
-          <li>Respeite limites técnicos, políticas de uso e termos das integrações habilitadas.</li>
+          <li><strong>Assinatura por Número:</strong> R$ 1.000,00 por Número/mês ativo.</li>
+          <li><strong>Uso variável (Sessão):</strong> R$ 0,24 por sessão de 24h efetivamente registrada.</li>
+          <li><strong>Regras de contagem:</strong> por contato e por canal; múltiplos canais geram sessões distintas; após 24h sem mensagens, nova sessão; templates de início de conversa (WhatsApp) contam sessão; logs imutáveis do NineChat prevalecem para auditoria.</li>
+          <li><strong>Apuração e relatórios:</strong> relatórios mensais com números ativos, total de sessões por canal e consolidação de valores; contestação em até 10 dias corridos.</li>
+          <li><strong>Faturamento:</strong> mensal, por nota fiscal; vencimento conforme proposta; meio de pagamento acordado.</li>
+          <li><strong>Atraso:</strong> mora 1% a.m., multa 2% e correção (IGPM/INPC), com possibilidade de suspensão/limitação após 10 dias de inadimplência, mediante aviso.</li>
+          <li><strong>Encargos de terceiros:</strong> tarifas dos Canais (Meta/WhatsApp, Telegram, Instagram/Facebook) são repassadas; mudanças de regras/preços dos Canais podem refletir-se nos valores, com aviso prévio de 15 dias.</li>
         </ul>
 
-        <h2 id="sec-planos">Planos, Cobrança e Cancelamento</h2>
-        <p>Condições comerciais, ciclos e reembolsos seguem contrato/proposta firmados com o Cliente.</p>
+        <h2 id="suporte">Suporte e Serviços</h2>
+        <ul>
+          <li><strong>Atendimento:</strong> dias úteis, 09h–18h (horário de Brasília); classificação e prazos de primeira resposta conforme severidade.</li>
+          <li><strong>Customizações/integrações específicas:</strong> orçadas à parte.</li>
+        </ul>
 
-        <h2 id="sec-ip">Conteúdos e Propriedade Intelectual</h2>
-        <p>{ISSUER} e licenciantes detêm direitos sobre a plataforma, marcas e materiais. Você mantém direitos sobre seus conteúdos, concedendo licença necessária para a prestação do serviço.</p>
+        <h2 id="obr-contratado">Obrigações do Contratado</h2>
+        <ul>
+          <li>Disponibilizar o serviço conforme estes Termos, observando o SLA.</li>
+          <li>Atender obrigações de segurança e privacidade (LGPD), manter confidencialidade e registros mínimos para auditoria por 12 meses.</li>
+        </ul>
 
-        <h2 id="sec-confid">Confidencialidade</h2>
-        <p>As partes manterão confidenciais informações não públicas obtidas em razão do uso do serviço.</p>
+        <h2 id="obr-contratante">Obrigações do Contratante</h2>
+        <ul>
+          <li>Observar a Política de Uso Aceitável e as políticas dos Canais.</li>
+          <li>Responder pelo conteúdo, bases de contato, templates e fluxos; indicar ponto focal para incidentes de dados e manter-se adimplente.</li>
+        </ul>
 
-        <h2 id="sec-priv">Privacidade e LGPD</h2>
-        <p>O tratamento de dados pessoais é regido pela nossa <a href="/legal/privacy">Política de Privacidade</a>.</p>
+        <h2 id="rescisao">Rescisão e Não Renovação</h2>
+        <ul>
+          <li><strong>Não renovação:</strong> aviso com 45 dias de antecedência ao término do período em curso.</li>
+          <li><strong>Rescisão antecipada pelo cliente (sem justa causa):</strong> devidos os valores proporcionais remanescentes das mensalidades fixas por Número até o fim do período em curso, pro rata die, além dos variáveis e encargos de terceiros incorridos até o desligamento.</li>
+          <li><strong>Rescisão por infração:</strong> imediata, se a violação material não for sanada em 10 dias após notificação.</li>
+          <li><strong>Efeitos:</strong> encerramento de acessos e procedimentos de devolução/eliminação de dados (LGPD); sobrevivem confidencialidade, valores devidos e limitações de responsabilidade.</li>
+        </ul>
 
-        <h2 id="sec-terceiros">Serviços de Terceiros</h2>
-        <p>Integrações externas estão sujeitas aos termos e políticas de seus respectivos provedores.</p>
+        <h2 id="ip">Propriedade Intelectual e Licença</h2>
+        <p>
+          O NineChat, marcas e documentação são de titularidade do contratado. Concede-se licença <em>não exclusiva, intransferível e revogável</em> de uso durante a vigência, vedadas engenharia reversa, sublocação e uso fora do escopo.
+        </p>
 
-        <h2 id="sec-garantias">Garantias, Isenções e SLA</h2>
-        <p>O serviço é fornecido “no estado em que se encontra”. Salvo previsão contratual, não garantimos disponibilidade ininterrupta, ausência de erros ou adequação a fins específicos.</p>
+        <h2 id="tecnico">Condições Técnicas e Manutenção</h2>
+        <ul>
+          <li>Manutenções programadas preferencialmente em janelas de baixo impacto, com aviso de 24h.</li>
+          <li>Backups lógicos conforme melhores práticas; recuperação condicionada à viabilidade técnica.</li>
+          <li>Integrações com APIs de terceiros sujeitas às respectivas políticas e disponibilidade.</li>
+        </ul>
 
-        <h2 id="sec-limite">Limitação de Responsabilidade</h2>
-        <p>Na extensão permitida por lei, não nos responsabilizamos por danos indiretos; a responsabilidade total restringe-se aos valores pagos nos 12 meses anteriores ao evento.</p>
+        <h2 id="limitacao">Limitação de Responsabilidade</h2>
+        <p>
+          Sem responsabilidade por conteúdo das mensagens, indisponibilidades de Canais/terceiros, falhas de infraestrutura do cliente, danos indiretos/lucros cessantes. Limite agregado por danos diretos: total pago nos <strong>3 (três) meses</strong> anteriores ao evento. Nada exclui responsabilidade por dolo.
+        </p>
 
-        <h2 id="sec-inden">Indenização</h2>
-        <p>Você indenizará {ISSUER} por reclamações de terceiros decorrentes de uso indevido do serviço ou violação destes Termos.</p>
+        <h2 id="sla">SLA (Resumo)</h2>
+        <ul>
+          <li><strong>Disponibilidade alvo mensal:</strong> 95% (mês civil). Indisponibilidade de Canais/terceiros não compõe indisponibilidade do NineChat.</li>
+          <li><strong>Prazos de primeira resposta (dias úteis 09h–18h):</strong> Crítico 4h; Alto 12h; Médio 24h; Baixo 48h.</li>
+          <li><strong>Créditos de serviço (sobre mensalidade fixa por Número do mês subsequente, não cumulativos):</strong> 93–94,99%: 5%; 90–92,99%: 10%; &lt;90%: 15% (mediante solicitação em até 10 dias corridos e observadas exclusões).</li>
+        </ul>
 
-        <h2 id="sec-susp">Suspensão e Encerramento</h2>
-        <p>Podemos suspender/encerrar acesso em caso de violação, risco à segurança ou exigência legal, com aviso quando aplicável.</p>
+        <h2 id="aup">Política de Uso Aceitável (Resumo)</h2>
+        <ul>
+          <li>Proibidos: SPAM, conteúdo ilícito, violação de direitos, coleta/tratamento sem base legal, burlar políticas dos Canais, exploração/engenharia reversa.</li>
+          <li>Bases/Opt-in: manter prova de consentimento/base legal e garantir opt-out; responsabilidade por templates/mensagens proativas.</li>
+          <li>Medidas: advertência, suspensão ou rescisão; abuso pode ser reportado ao ponto focal do cliente.</li>
+        </ul>
 
-        <h2 id="sec-changes">Alterações</h2>
-        <p>Podemos atualizar estes Termos e comunicaremos mudanças relevantes. A data no topo indica a versão vigente.</p>
+        <h2 id="foro">Lei Aplicável e Foro</h2>
+        <p>Aplica-se a legislação brasileira. Fica eleito o foro da Comarca de Niterói/RJ.</p>
 
-        <h2 id="sec-lei">Lei Aplicável e Foro</h2>
-        <p>Regidos pelas <strong>{JURISDICTION}</strong>. Foro eleito: <strong>{VENUE}</strong>.</p>
-
-        <h2 id="sec-contato">Contato</h2>
-        <p>Dúvidas? <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</p>
+        <h2 id="contato">Contato</h2>
+        <p>Dúvidas: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></p>
       </article>
     </LegalLayout>
   );
